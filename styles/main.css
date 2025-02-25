@@ -48,3 +48,45 @@ btn .create-account {
 .custom-card .btn-primary:hover {
   background-color: #9d9d9d;
 }
+.arrow-btn {
+  display: block;
+  text-align: left;
+}
+
+.challenge-tag {
+  border-radius: 5px;
+  border-color: black;
+  border-width: 1px;
+  padding: 5px;
+}
+
+.homepage h1:hover, .homepage h2:hover, .homepage h3:hover {
+  font-style: italic;
+}
+
+.checkbox {
+  border: solid rgb(255, 128, 128);
+}
+
+.checkbox:checked {
+  border: none;
+}
+
+.challenge {
+  border: solid black 5px;
+}
+
+.challenge:hover {
+  border: dashed black 10px;
+}
+
+@keyframes slide-title {
+  from {margin-left: 50px;}
+  to {margin-left:0px;}
+}
+
+.homepage h1 {
+  animation-name: slide-title;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
