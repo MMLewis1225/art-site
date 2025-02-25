@@ -65,47 +65,164 @@
       </nav>
     </header>
     <div class="container">
-      <div class="row g-4">
-        <h1>Challenges</h1>
-        <div class="row">
-          <div class="col-md-4 mb-3">
-            <div class="card">
+      <main class="container py-4">
+        <!-- Header Section -->
+        <div class="row mb-5">
+          <div class="col-12 text-center">
+            <h1 class="display-4 fw-bold mb-3">Art Challenges</h1>
+            <p class="lead">
+              Explore structured challenges to boost your creativity and push
+              your artistic boundaries.
+            </p>
+            <p class="mb-4">
+              Our challenges are organized into three categories that focus on
+              different aspects of the artistic process.
+            </p>
+            <a href="challenges-search.html" class="btn btn-primary px-4 py-2"
+              >View All Challenges</a
+            >
+          </div>
+        </div>
+
+        <!-- Challenge Categories -->
+        <div class="row mb-4">
+          <div class="col-12">
+            <h2 class="fw-bold mb-4">Challenge Categories</h2>
+            <p class="mb-4">
+              Our challenges are organized into three main categories, each
+              focusing on a different aspect of the artistic process.
+            </p>
+          </div>
+        </div>
+
+        <!-- Material Based -->
+        <div class="row mb-5">
+          <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm custom-card">
               <div class="card-body">
-                <h3 class="card-title">Materials Based</h3>
-                <p class="card-text">description...What is used</p>
-                <a href="#" class="btn btn-primary">Submit</a>
+                <div class="d-flex align-items-center mb-3">
+                  <div class="display-5 text-primary me-3">
+                    <i class="bi bi-tools"></i>
+                  </div>
+                  <h3 class="card-title mb-0">Material Based</h3>
+                </div>
+                <h5 class="text-muted mb-3">What is used</h5>
+                <p class="card-text">
+                  Challenges that focus on specific materials or media.
+                </p>
+
+                <div class="mt-4">
+                  <a
+                    href="challenges-search.html?category=material"
+                    class="btn btn-outline-primary"
+                    >View Material Challenges</a
+                  >
+                </div>
               </div>
             </div>
           </div>
-          <div class="col-md-4 mb-3">
-            <div class="card">
+
+          <!-- Process Based -->
+          <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm custom-card">
               <div class="card-body">
-                <h3 class="card-title">Methods Based</h3>
-                <p class="card-text">How you do it</p>
-                <a href="#" class="btn btn-primary">Submit</a>
+                <div class="d-flex align-items-center mb-3">
+                  <div class="display-5 text-primary me-3">
+                    <i class="bi bi-gear"></i>
+                  </div>
+                  <h3 class="card-title mb-0">Process Based</h3>
+                </div>
+                <h5 class="text-muted mb-3">How it's made</h5>
+                <p class="card-text">
+                  Challenges that focus on technique, method, or approach.
+                </p>
+
+                <div class="mt-4">
+                  <a
+                    href="challenges-search.html?category=process"
+                    class="btn btn-outline-primary"
+                    >View Process Challenges</a
+                  >
+                </div>
               </div>
             </div>
           </div>
-          <div class="col-md-4 mb-3">
-            <div class="card challege-card">
+
+          <!-- Concept Based -->
+          <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm custom-card">
               <div class="card-body">
-                <h3 class="card-title">Concept Based</h3>
-                <p class="card-text">What you</p>
-                <a href="#" class="btn btn-primary">Submit</a>
-                <a
-                  href="#"
-                  class="icon-link gap-1 icon-link-hover stretched-link"
-                >
-                  Continue reading
-                  <svg class="bi"><use xlink:href="#chevron-right"></use></svg
-                  >::after
-                </a>
+                <div class="d-flex align-items-center mb-3">
+                  <div class="display-5 text-primary me-3">
+                    <i class="bi bi-lightbulb"></i>
+                  </div>
+                  <h3 class="card-title mb-0">Concept Based</h3>
+                </div>
+                <h5 class="text-muted mb-3">Why it's made</h5>
+                <p class="card-text">
+                  Challenges that focus on ideas, themes, or meanings.
+                </p>
+
+                <div class="mt-4">
+                  <a
+                    href="challenges-search.html?category=concept"
+                    class="btn btn-outline-primary"
+                    >View Concept Challenges</a
+                  >
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
+        <!-- Getting Started Guide -->
+        <div class="row mb-5">
+          <div class="col-12">
+            <h3 class="fw-bold mb-4">Getting Started with Challenges</h3>
+            <div class="row g-4">
+              <div class="col-md-4">
+                <div class="p-3 border rounded bg-light text-center h-100">
+                  <div class="display-5 text-primary mb-3">
+                    <i class="bi bi-1-circle"></i>
+                  </div>
+                  <h5>Choose a Category</h5>
+                  <p>
+                    Select a challenge type that interests you or matches the
+                    materials you have available. Beginners often start with
+                    Material challenges.
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="p-3 border rounded bg-light text-center h-100">
+                  <div class="display-5 text-primary mb-3">
+                    <i class="bi bi-2-circle"></i>
+                  </div>
+                  <h5>Set a Timeframe</h5>
+                  <p>
+                    Decide how much time you'll dedicate to the challenge. Some
+                    challenges are quick exercises, while others may span
+                    several days.
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="p-3 border rounded bg-light text-center h-100">
+                  <div class="display-5 text-primary mb-3">
+                    <i class="bi bi-3-circle"></i>
+                  </div>
+                  <h5>Document Your Process</h5>
+                  <p>
+                    Track your progress by keeping notes on your experience,
+                    challenges, and insights. This will help you reflect on your
+                    artistic growth.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
       <!--Diff Cards-->
       <h1>Challenges</h1>
       <div class="row">

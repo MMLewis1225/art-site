@@ -65,30 +65,3 @@ btn .create-account {
   border-width: 1px;
   padding: 5px;
 }
-
-/* generator3 */
-.category-section {
-  margin-bottom: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  padding: 1rem;
-}
-.category-header {
-  cursor: pointer;
-  padding: 0.5rem;
-  position: relative;
-}
-.options-container {
-  padding-top: 0.5rem;
-  padding-left: 1rem;
-}
-.form-check {
-  margin-bottom: 0.25rem;
-}
-.prompt-display {
-  min-height: 100px;
-  background-color: #f0f7ff;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-top: 1.5rem;
-}
