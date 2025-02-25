@@ -4,7 +4,6 @@
 
 body {
   font-family: monospace;
-
   margin: 0;
   padding: 0;
 }
@@ -17,11 +16,6 @@ btn .create-account {
   border: none;
   cursor: pointer;
   width: 100%;
-}
-
-.navbar-nav-login {
-  display: flex;
-  gap: 15px;
 }
 
 .custom-card {
@@ -53,15 +47,4 @@ btn .create-account {
 
 .custom-card .btn-primary:hover {
   background-color: #9d9d9d;
-}
-.arrow-btn {
-  display: block;
-  text-align: left;
-}
-
-.challenge-tag {
-  border-radius: 5px;
-  border-color: black;
-  border-width: 1px;
-  padding: 5px;
 }
