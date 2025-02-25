@@ -95,3 +95,14 @@ btn .create-account {
   animation-duration: 1s;
   animation-fill-mode: forwards;
 }
+
+
+#login-button {
+  color: #0869f8; /* Change text color */
+  border-color: #0869f8; /* Change border color */
+}
+
+#login-button:hover {
+  background-color: #0869f8; /* Change background on hover */
+  color: white; /* Change text color on hover */
+}
