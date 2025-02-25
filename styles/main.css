@@ -1,0 +1,94 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: monospace;
+
+  margin: 0;
+  padding: 0;
+}
+
+btn .create-account {
+  background-color: #4caf50;
+  color: rgb(90, 64, 64);
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.navbar-nav-login {
+  display: flex;
+  gap: 15px;
+}
+
+.custom-card {
+  background-color: #000000;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.custom-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.custom-card .card-title {
+  color: #e9e9e9;
+}
+
+.custom-card .card-text {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.custom-card .btn-primary {
+  background-color: #000000;
+  border: none;
+}
+
+.custom-card .btn-primary:hover {
+  background-color: #9d9d9d;
+}
+.arrow-btn {
+  display: block;
+  text-align: left;
+}
+
+.challenge-tag {
+  border-radius: 5px;
+  border-color: black;
+  border-width: 1px;
+  padding: 5px;
+}
+
+/* generator3 */
+.category-section {
+  margin-bottom: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+}
+.category-header {
+  cursor: pointer;
+  padding: 0.5rem;
+  position: relative;
+}
+.options-container {
+  padding-top: 0.5rem;
+  padding-left: 1rem;
+}
+.form-check {
+  margin-bottom: 0.25rem;
+}
+.prompt-display {
+  min-height: 100px;
+  background-color: #f0f7ff;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+}

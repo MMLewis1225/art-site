@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Art Prompt Generator</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-md bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">ArtSpark</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarCollapse"
+            aria-controls="navbarCollapse"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+              <li class="nav-item">
+                <a class="nav-link" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link active"
+                  aria-current="page"
+                  href="generator.html"
+                  >Generate</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="challenges.html">Challenges</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="profile.html">My Profile</a>
+              </li>
+            </ul>
+
+            <div class="d-flex flex-row flex-md-row gap-2">
+              <a href="login.html" class="btn btn-sm btn-outline-primary"
+                >Log in</a
+              >
+              <a href="signup.html" class="btn btn-sm btn-primary">Sign-up</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container py-4">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h2 class="card-title mb-3">🎨 Art Prompt Generator</h2>
+          <p class="card-text text-muted mb-4">
+            Select your preferences to generate a personalized art prompt. You
+            can be as specific or as open-ended as you like!
+          </p>
+
+          <!-- Basic Categories Section -->
+          <h4 class="mb-3">Step 1: Choose Your Materials</h4>
+          <p class="text-muted mb-3">
+            Select the mediums you have available or want to work with:
+          </p>
+
+          <!-- Medium Selection -->
+          <div class="category-section mb-4">
+            <div class="d-flex justify-content-between mb-2">
+              <h5 class="mb-0">Medium (What you'll create with)</h5>
+              <div>
+                <button
+                  class="btn btn-sm btn-outline-secondary me-2"
+                  id="selectAllMediums"
+                >
+                  Select All
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-secondary"
+                  id="clearAllMediums"
+                >
+                  Clear All
+                </button>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-md-3">
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value="graphite"
+                    id="mediumGraphite"
+                  />
+                  <label class="form-check-label" for="mediumGraphite"
+                    >Graphite/Pencil</label
+                  >
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value="ink"
+                    id="mediumInk"
+                  />
+                  <label class="form-check-label" for="mediumInk">Ink</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value="charcoal"
+                    id="mediumCharcoal"
+                  />
+                  <label class="form-check-label" for="mediumCharcoal"
+                    >Charcoal</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value="watercolor"
+                    id="mediumWatercolor"
+                  />
+                  <label class="form-check-label" for="mediumWatercolor"
+                    >Watercolor</label
+                  >
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value="acrylic"
+                    id="mediumAcrylic"
+                  />
+                  <label class="form-check-label" for="mediumAcrylic"
+                    >Acrylic</label
+                  >
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value="oil"
+                    id="mediumOil"
+                  />
+                  <label class="form-check-label" for="mediumOil"
+                    >Oil Paint</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value="colorPencil"
+                    id="mediumColorPencil"
+                  />
+                  <label class="form-check-label" for="mediumColorPencil"
+                    >Colored Pencil</label
+                  >
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value="pastel"
+                    id="mediumPastel"
+                  />
+                  <label class="form-check-label" for="mediumPastel"
+                    >Pastel</label
+                  >
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value="marker"
+                    id="mediumMarker"
+                  />
+                  <label class="form-check-label" for="mediumMarker"
+                    >Markers</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value="digital"
+                    id="mediumDigital"
+                  />
+                  <label class="form-check-label" for="mediumDigital"
+                    >Digital</label
+                  >
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value="mixedMedia"
+                    id="mediumMixedMedia"
+                  />
+                  <label class="form-check-label" for="mediumMixedMedia"
+                    >Mixed Media</label
+                  >
+                </div>
+                <div class="form-check mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value="collage"
+                    id="mediumCollage"
+                  />
+                  <label class="form-check-label" for="mediumCollage"
+                    >Collage</label
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h4 class="mb-3">Step 2: Choose Optional Elements (if desired)</h4>
+          <p class="text-muted mb-3">
+            Expand your prompt with these additional categories:
+          </p>
+
+          <!-- Optional Categories - Collapsible Sections -->
+          <div class="accordion mb-4" id="promptOptions">
+            <!-- Style Section -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#styleCollapse"
+                  aria-expanded="false"
+                  aria-controls="styleCollapse"
+                >
+                  <div class="form-check mb-0">
+                    <input
+                      class="form-check-input me-2"
+                      type="checkbox"
+                      value="includeStyle"
+                      id="includeStyleCheck"
+                    />
+                    <label class="form-check-label" for="includeStyleCheck"
+                      >Style (Visual approach)</label
+                    >
+                  </div>
+                </button>
+              </h2>
+              <div
+                id="styleCollapse"
+                class="accordion-collapse collapse"
+                data-bs-parent="#promptOptions"
+              >
+                <div class="accordion-body">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input style-option"
+                          type="checkbox"
+                          value="realistic"
+                          id="styleRealistic"
+                        />
+                        <label class="form-check-label" for="styleRealistic"
+                          >Realistic</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input style-option"
+                          type="checkbox"
+                          value="abstract"
+                          id="styleAbstract"
+                        />
+                        <label class="form-check-label" for="styleAbstract"
+                          >Abstract</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input style-option"
+                          type="checkbox"
+                          value="impressionist"
+                          id="styleImpressionist"
+                        />
+                        <label class="form-check-label" for="styleImpressionist"
+                          >Impressionist</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input style-option"
+                          type="checkbox"
+                          value="expressionist"
+                          id="styleExpressionist"
+                        />
+                        <label class="form-check-label" for="styleExpressionist"
+                          >Expressionist</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input style-option"
+                          type="checkbox"
+                          value="minimalist"
+                          id="styleMinimalist"
+                        />
+                        <label class="form-check-label" for="styleMinimalist"
+                          >Minimalist</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input style-option"
+                          type="checkbox"
+                          value="surreal"
+                          id="styleSurreal"
+                        />
+                        <label class="form-check-label" for="styleSurreal"
+                          >Surreal</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input style-option"
+                          type="checkbox"
+                          value="illustrative"
+                          id="styleIllustrative"
+                        />
+                        <label class="form-check-label" for="styleIllustrative"
+                          >Illustrative</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input style-option"
+                          type="checkbox"
+                          value="folk"
+                          id="styleFolk"
+                        />
+                        <label class="form-check-label" for="styleFolk"
+                          >Folk Art</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-2">
+                    <button
+                      class="btn btn-sm btn-outline-secondary me-2 select-all-btn"
+                      data-target="style-option"
+                    >
+                      Select All
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-secondary clear-all-btn"
+                      data-target="style-option"
+                    >
+                      Clear All
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Color Scheme Section -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#colorCollapse"
+                  aria-expanded="false"
+                  aria-controls="colorCollapse"
+                >
+                  <div class="form-check mb-0">
+                    <input
+                      class="form-check-input me-2"
+                      type="checkbox"
+                      value="includeColor"
+                      id="includeColorCheck"
+                    />
+                    <label class="form-check-label" for="includeColorCheck"
+                      >Color Scheme</label
+                    >
+                  </div>
+                </button>
+              </h2>
+              <div
+                id="colorCollapse"
+                class="accordion-collapse collapse"
+                data-bs-parent="#promptOptions"
+              >
+                <div class="accordion-body">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input color-option"
+                          type="radio"
+                          name="colorScheme"
+                          value="monochromatic"
+                          id="colorMonochromatic"
+                        />
+                        <label class="form-check-label" for="colorMonochromatic"
+                          >Monochromatic</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input color-option"
+                          type="radio"
+                          name="colorScheme"
+                          value="analogous"
+                          id="colorAnalogous"
+                        />
+                        <label class="form-check-label" for="colorAnalogous"
+                          >Analogous</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input color-option"
+                          type="radio"
+                          name="colorScheme"
+                          value="complementary"
+                          id="colorComplementary"
+                        />
+                        <label class="form-check-label" for="colorComplementary"
+                          >Complementary</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input color-option"
+                          type="radio"
+                          name="colorScheme"
+                          value="triadic"
+                          id="colorTriadic"
+                        />
+                        <label class="form-check-label" for="colorTriadic"
+                          >Triadic</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input color-option"
+                          type="radio"
+                          name="colorScheme"
+                          value="warm"
+                          id="colorWarm"
+                        />
+                        <label class="form-check-label" for="colorWarm"
+                          >Warm Colors</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input color-option"
+                          type="radio"
+                          name="colorScheme"
+                          value="cool"
+                          id="colorCool"
+                        />
+                        <label class="form-check-label" for="colorCool"
+                          >Cool Colors</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-2">
+                    <button
+                      class="btn btn-sm btn-outline-secondary clear-all-btn"
+                      data-target="color-option"
+                    >
+                      Clear Selection
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Subject/Theme Section -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#subjectCollapse"
+                  aria-expanded="false"
+                  aria-controls="subjectCollapse"
+                >
+                  <div class="form-check mb-0">
+                    <input
+                      class="form-check-input me-2"
+                      type="checkbox"
+                      value="includeSubject"
+                      id="includeSubjectCheck"
+                    />
+                    <label class="form-check-label" for="includeSubjectCheck"
+                      >Subject/Theme (What to depict)</label
+                    >
+                  </div>
+                </button>
+              </h2>
+              <div
+                id="subjectCollapse"
+                class="accordion-collapse collapse"
+                data-bs-parent="#promptOptions"
+              >
+                <div class="accordion-body">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input subject-option"
+                          type="checkbox"
+                          value="landscape"
+                          id="subjectLandscape"
+                        />
+                        <label class="form-check-label" for="subjectLandscape"
+                          >Landscape/Nature</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input subject-option"
+                          type="checkbox"
+                          value="stillLife"
+                          id="subjectStillLife"
+                        />
+                        <label class="form-check-label" for="subjectStillLife"
+                          >Still Life</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input subject-option"
+                          type="checkbox"
+                          value="portrait"
+                          id="subjectPortrait"
+                        />
+                        <label class="form-check-label" for="subjectPortrait"
+                          >Portrait</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input subject-option"
+                          type="checkbox"
+                          value="architecture"
+                          id="subjectArchitecture"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="subjectArchitecture"
+                          >Architecture</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input subject-option"
+                          type="checkbox"
+                          value="emotional"
+                          id="subjectEmotional"
+                        />
+                        <label class="form-check-label" for="subjectEmotional"
+                          >Emotion/Feeling</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input subject-option"
+                          type="checkbox"
+                          value="abstract"
+                          id="subjectAbstract"
+                        />
+                        <label class="form-check-label" for="subjectAbstract"
+                          >Abstract Concept</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input subject-option"
+                          type="checkbox"
+                          value="memory"
+                          id="subjectMemory"
+                        />
+                        <label class="form-check-label" for="subjectMemory"
+                          >Memory</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input subject-option"
+                          type="checkbox"
+                          value="dream"
+                          id="subjectDream"
+                        />
+                        <label class="form-check-label" for="subjectDream"
+                          >Dream</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input subject-option"
+                          type="checkbox"
+                          value="fantasy"
+                          id="subjectFantasy"
+                        />
+                        <label class="form-check-label" for="subjectFantasy"
+                          >Fantasy</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-2">
+                    <button
+                      class="btn btn-sm btn-outline-secondary me-2 select-all-btn"
+                      data-target="subject-option"
+                    >
+                      Select All
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-secondary clear-all-btn"
+                      data-target="subject-option"
+                    >
+                      Clear All
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Technique Section -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#techniqueCollapse"
+                  aria-expanded="false"
+                  aria-controls="techniqueCollapse"
+                >
+                  <div class="form-check mb-0">
+                    <input
+                      class="form-check-input me-2"
+                      type="checkbox"
+                      value="includeTechnique"
+                      id="includeTechniqueCheck"
+                    />
+                    <label class="form-check-label" for="includeTechniqueCheck"
+                      >Technique (Methods to apply)</label
+                    >
+                  </div>
+                </button>
+              </h2>
+              <div
+                id="techniqueCollapse"
+                class="accordion-collapse collapse"
+                data-bs-parent="#promptOptions"
+              >
+                <div class="accordion-body">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input technique-option"
+                          type="checkbox"
+                          value="crossHatching"
+                          id="techniqueCrossHatching"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="techniqueCrossHatching"
+                          >Cross Hatching</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input technique-option"
+                          type="checkbox"
+                          value="stippling"
+                          id="techniqueStippling"
+                        />
+                        <label class="form-check-label" for="techniqueStippling"
+                          >Stippling</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input technique-option"
+                          type="checkbox"
+                          value="dryBrush"
+                          id="techniqueDryBrush"
+                        />
+                        <label class="form-check-label" for="techniqueDryBrush"
+                          >Dry Brush</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input technique-option"
+                          type="checkbox"
+                          value="wetOnWet"
+                          id="techniqueWetOnWet"
+                        />
+                        <label class="form-check-label" for="techniqueWetOnWet"
+                          >Wet on Wet</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input technique-option"
+                          type="checkbox"
+                          value="layering"
+                          id="techniqueLayering"
+                        />
+                        <label class="form-check-label" for="techniqueLayering"
+                          >Layering</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input technique-option"
+                          type="checkbox"
+                          value="glazing"
+                          id="techniqueGlazing"
+                        />
+                        <label class="form-check-label" for="techniqueGlazing"
+                          >Glazing</label
+                        >
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input technique-option"
+                          type="checkbox"
+                          value="paletteKnife"
+                          id="techniquePaletteKnife"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="techniquePaletteKnife"
+                          >Palette Knife</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input technique-option"
+                          type="checkbox"
+                          value="splattering"
+                          id="techniqueSplattering"
+                        />
+                        <label
+                          class="form-check-label"
+                          for="techniqueSplattering"
+                          >Splattering</label
+                        >
+                      </div>
+                      <div class="form-check mb-2">
+                        <input
+                          class="form-check-input technique-option"
+                          type="checkbox"
+                          value="collage"
+                          id="techniqueCollage"
+                        />
+                        <label class="form-check-label" for="techniqueCollage"
+                          >Collage</label
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mt-2">
+                    <button
+                      class="btn btn-sm btn-outline-secondary me-2 select-all-btn"
+                      data-target="technique-option"
+                    >
+                      Select All
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-secondary clear-all-btn"
+                      data-target="technique-option"
+                    >
+                      Clear All
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reference Type Section -->
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#referenceCollapse"
+                  aria-expanded="false"
+                  aria-controls="referenceCollapse"
+                >
+                  <div class="form-check mb-0">
+                    <input
+                      class="form-check-input me-2"
+                      type="checkbox"
+                      value="includeReference"
+                      id="includeReferenceCheck"
+                    />
+                    <label class="form-check-label" for="includeReferenceCheck"
+                      >Reference Suggestion</label
+                    >
+                  </div>
+                </button>
+              </h2>
+              <div
+                id="referenceCollapse"
+                class="accordion-collapse collapse"
+                data-bs-parent="#promptOptions"
+              >
+                <div class="accordion-body">
+                  <div class="form-check mb-2">
+                    <input
+                      class="form-check-input reference-option"
+                      type="radio"
+                      name="referenceType"
+                      value="personal"
+                      id="referencePersonal"
+                    />
+                    <label class="form-check-label" for="referencePersonal"
+                      >Personal (from your environment)</label
+                    >
+                  </div>
+                  <div class="form-check mb-2">
+                    <input
+                      class="form-check-input reference-option"
+                      type="radio"
+                      name="referenceType"
+                      value="memory"
+                      id="referenceMemory"
+                    />
+                    <label class="form-check-label" for="referenceMemory"
+                      >From memory</label
+                    >
+                  </div>
+                  <div class="form-check mb-2">
+                    <input
+                      class="form-check-input reference-option"
+                      type="radio"
+                      name="referenceType"
+                      value="imagination"
+                      id="referenceImagination"
+                    />
+                    <label class="form-check-label" for="referenceImagination"
+                      >From imagination</label
+                    >
+                  </div>
+                  <div class="form-check mb-2">
+                    <input
+                      class="form-check-input reference-option"
+                      type="radio"
+                      name="referenceType"
+                      value="suggestion"
+                      id="referenceSuggestion"
+                    />
+                    <label class="form-check-label" for="referenceSuggestion"
+                      >Give me a specific suggestion</label
+                    >
+                  </div>
+                  <div class="mt-2">
+                    <button
+                      class="btn btn-sm btn-outline-secondary clear-all-btn"
+                      data-target="reference-option"
+                    >
+                      Clear Selection
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Challenge Complexity -->
+          <div class="mb-4">
+            <h5 class="mb-2">Challenge Complexity (Optional)</h5>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="complexity"
+                id="complexityLow"
+                value="low"
+              />
+              <label class="form-check-label" for="complexityLow">Easy</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="complexity"
+                id="complexityMedium"
+                value="medium"
+              />
+              <label class="form-check-label" for="complexityMedium"
+                >Medium</label
+              >
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="complexity"
+                id="complexityHigh"
+                value="high"
+              />
+              <label class="form-check-label" for="complexityHigh"
+                >Challenging</label
+              >
+            </div>
+          </div>
+
+          <!-- Generate Button -->
+          <div class="d-grid gap-2 mt-4">
+            <button
+              class="btn btn-primary btn-lg"
+              type="button"
+              id="generateButton"
+            >
+              Generate Art Prompt
+            </button>
+          </div>
+
+          <!-- Prompt Display -->
+          <div class="prompt-display mt-4" id="promptDisplay">
+            <h4 class="mb-3">✨ Your Art Prompt</h4>
+            <p class="prompt-text">
+              Your prompt will appear here after you generate it.
+            </p>
+            <div
+              class="d-flex justify-content-between mt-3"
+              id="promptActions"
+              style="display: none !important"
+            >
+              <button class="btn btn-outline-secondary" id="regenerateButton">
+                🔄 Regenerate
+              </button>
+              <button class="btn btn-outline-primary" id="saveButton">
+                ❤️ Save Prompt
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="container pt-3 mt-4 text-body-secondary border-top">
+      <p>© 2025. All rights reserved.</p>
+    </footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
