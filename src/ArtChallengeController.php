@@ -491,24 +491,26 @@ public function showChallenges() {
  * Show the challenge search page with filtered challenges
  */
 public function showChallengeSearch() {
-    // Get filter parameters - handle both string and array inputs
-    $categories = isset($this->input["category"]) ? (array)$this->input["category"] : [];
+    // Get filter parameters
+    $category = isset($this->input["category"]) ? $this->input["category"] : null;
     $duration = isset($this->input["duration"]) ? $this->input["duration"] : null;
     
     // Build query conditions
     $conditions = [];
     $params = [];
     
-    // Handle multiple category filters
-    if (!empty($categories)) {
+    if ($category) {
+        // Handle both string and array inputs
+        $categories = is_array($category) ? $category : [$category];
+        
         $categoryConditions = [];
-        foreach ($categories as $category) {
+        foreach ($categories as $cat) {
             $categoryConditions[] = "type LIKE $" . (count($params) + 1);
-            $params[] = "%$category%";
+            $params[] = "%$cat%";
         }
         
-        // If we have multiple categories, combine them with AND to require all
-        if (count($categoryConditions) > 0) {
+        if (!empty($categoryConditions)) {
+            // Use AND to require all categories
             $conditions[] = "(" . implode(" AND ", $categoryConditions) . ")";
         }
     }
@@ -528,21 +530,18 @@ public function showChallengeSearch() {
         }
     }
     
-    // Build the complete query
-    $query = "SELECT * FROM art_thing_challenges";
+      // Build the complete query
+      $query = "SELECT * FROM art_thing_challenges";
     
-    if (!empty($conditions)) {
-        $query .= " WHERE " . implode(" AND ", $conditions);
-    }
-    
-    $query .= " ORDER BY created_at DESC";
-    
-    // Execute query
-    $challenges = $this->db->query($query, ...$params);
-    
-    // Pass the category array to the template
-    $category = $categories;
-    
+      if (!empty($conditions)) {
+          $query .= " WHERE " . implode(" AND ", $conditions);
+      }
+      
+      $query .= " ORDER BY created_at DESC";
+      
+      // Execute query
+      $challenges = $this->db->query($query, ...$params);
+      
     // Include template with challenges data
     include("src/templates/challenges-search.php");
 }

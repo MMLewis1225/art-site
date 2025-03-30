@@ -59,7 +59,7 @@ $challenges = $challenges ?? []; // Use the challenges passed from the controlle
                   id="btn-check-material"
                   value="material"
                   name="category[]"
-                  <?php echo (is_array($category) && in_array('material', $category)) ? 'checked' : ''; ?>
+                  <?php echo (is_array($category) && in_array('material', $category)) || $category === 'material' ? 'checked' : ''; ?>
                 >
                 <label
                   class="btn btn-outline-secondary"
@@ -73,7 +73,7 @@ $challenges = $challenges ?? []; // Use the challenges passed from the controlle
                   id="btn-check-process"
                   value="process"
                   name="category[]"
-                  <?php echo (is_array($category) && in_array('process', $category)) ? 'checked' : ''; ?>
+                  <?php echo (is_array($category) && in_array('process', $category)) || $category === 'process' ? 'checked' : ''; ?>
                 >
                 <label
                   class="btn btn-outline-secondary"
@@ -87,7 +87,7 @@ $challenges = $challenges ?? []; // Use the challenges passed from the controlle
                   id="btn-check-concept"
                   value="concept"
                   name="category[]"
-                  <?php echo (is_array($category) && in_array('concept', $category)) ? 'checked' : ''; ?>
+                  <?php echo (is_array($category) && in_array('concept', $category)) || $category === 'concept' ? 'checked' : ''; ?>
                 >
                 <label
                   class="btn btn-outline-secondary"
