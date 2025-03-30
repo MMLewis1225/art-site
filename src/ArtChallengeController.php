@@ -295,6 +295,7 @@ public function savePrompt() {
  /**
  * Show the dashboard page
  */
+
 public function showDashboard() {
     // Check if user is logged in
     if (!isset($_SESSION["logged_in"]) || !$_SESSION["logged_in"]) {
@@ -490,19 +491,29 @@ public function showChallenges() {
  * Show the challenge search page with filtered challenges
  */
 public function showChallengeSearch() {
-    // Get filter parameters
-    $category = isset($this->input["category"]) ? $this->input["category"] : null;
+    // Get filter parameters - handle both string and array inputs
+    $categories = isset($this->input["category"]) ? (array)$this->input["category"] : [];
     $duration = isset($this->input["duration"]) ? $this->input["duration"] : null;
     
     // Build query conditions
     $conditions = [];
     $params = [];
     
-    if ($category) {
-        $conditions[] = "type LIKE $" . (count($params) + 1);
-        $params[] = "%$category%";
+    // Handle multiple category filters
+    if (!empty($categories)) {
+        $categoryConditions = [];
+        foreach ($categories as $category) {
+            $categoryConditions[] = "type LIKE $" . (count($params) + 1);
+            $params[] = "%$category%";
+        }
+        
+        // If we have multiple categories, combine them with AND to require all
+        if (count($categoryConditions) > 0) {
+            $conditions[] = "(" . implode(" AND ", $categoryConditions) . ")";
+        }
     }
     
+    // Handle duration filter
     if ($duration) {
         $durationArr = explode(',', $duration);
         $durationPlaceholders = [];
@@ -516,9 +527,9 @@ public function showChallengeSearch() {
             $conditions[] = "duration IN (" . implode(",", $durationPlaceholders) . ")";
         }
     }
-
+    
+    // Build the complete query
     $query = "SELECT * FROM art_thing_challenges";
-
     
     if (!empty($conditions)) {
         $query .= " WHERE " . implode(" AND ", $conditions);
@@ -529,7 +540,11 @@ public function showChallengeSearch() {
     // Execute query
     $challenges = $this->db->query($query, ...$params);
     
-    include("templates/challenges-search.php");
+    // Pass the category array to the template
+    $category = $categories;
+    
+    // Include template with challenges data
+    include("src/templates/challenges-search.php");
 }
 
 /**

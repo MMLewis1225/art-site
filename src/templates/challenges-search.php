@@ -1,7 +1,7 @@
 <?php
 // Get the challenges
 $category = isset($_GET["category"]) ? $_GET["category"] : null;
-$challenges = $challenges ?? []; // challenges passed from the controller
+$challenges = $challenges ?? []; // Use the challenges passed from the controller
 ?>
 
 <!DOCTYPE html>
@@ -41,58 +41,65 @@ $challenges = $challenges ?? []; // challenges passed from the controller
       </div>
     </div>
 
-    <!-- Challenge Type Filter -->
-    <div class="row mb-4">
-      <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center flex-wrap">
-          <div>
-            <h5 class="mb-3 fw-bold">Type</h5>
-            <div class="container text-center">
-              <div class="row">
-                <div class="col">
-                  <input
-                    type="checkbox"
-                    class="btn-check filter-type"
-                    id="btn-check-material"
-                    value="material"
-                    <?php echo $category == 'material' ? 'checked' : ''; ?>
-                  >
-                  <label
-                    class="btn btn-outline-secondary"
-                    for="btn-check-material"
-                  >Material</label>
-                </div>
-                <div class="col">
-                  <input
-                    type="checkbox"
-                    class="btn-check filter-type"
-                    id="btn-check-process"
-                    value="process"
-                    <?php echo $category == 'process' ? 'checked' : ''; ?>
-                  >
-                  <label
-                    class="btn btn-outline-secondary"
-                    for="btn-check-process"
-                  >Process</label>
-                </div>
-                <div class="col">
-                  <input
-                    type="checkbox"
-                    class="btn-check filter-type"
-                    id="btn-check-concept"
-                    value="concept"
-                    <?php echo $category == 'concept' ? 'checked' : ''; ?>
-                  >
-                  <label
-                    class="btn btn-outline-secondary"
-                    for="btn-check-concept"
-                  >Concept</label>
-                </div>
+       <!-- Challenge Type Filter -->
+<form id="filterForm" method="GET" action="index.php">
+  <input type="hidden" name="command" value="challenge_search">
+  
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center flex-wrap">
+        <div>
+          <h5 class="mb-3 fw-bold">Type</h5>
+          <div class="container text-center">
+            <div class="row">
+              <div class="col">
+                <input
+                  type="checkbox"
+                  class="btn-check filter-type"
+                  id="btn-check-material"
+                  value="material"
+                  name="category[]"
+                  <?php echo (is_array($category) && in_array('material', $category)) ? 'checked' : ''; ?>
+                >
+                <label
+                  class="btn btn-outline-secondary"
+                  for="btn-check-material"
+                >Material</label>
+              </div>
+              <div class="col">
+                <input
+                  type="checkbox"
+                  class="btn-check filter-type"
+                  id="btn-check-process"
+                  value="process"
+                  name="category[]"
+                  <?php echo (is_array($category) && in_array('process', $category)) ? 'checked' : ''; ?>
+                >
+                <label
+                  class="btn btn-outline-secondary"
+                  for="btn-check-process"
+                >Process</label>
+              </div>
+              <div class="col">
+                <input
+                  type="checkbox"
+                  class="btn-check filter-type"
+                  id="btn-check-concept"
+                  value="concept"
+                  name="category[]"
+                  <?php echo (is_array($category) && in_array('concept', $category)) ? 'checked' : ''; ?>
+                >
+                <label
+                  class="btn btn-outline-secondary"
+                  for="btn-check-concept"
+                >Concept</label>
               </div>
             </div>
           </div>
-
-          <div class="d-flex gap-2 mt-3 mt-md-0">
+        </div>
+        
+        <!-- Duration filters -->
+        <div class="d-flex gap-2 mt-3 mt-md-0">
             <div class="dropdown">
               <button
                 class="btn btn-outline-secondary dropdown-toggle"
@@ -186,10 +193,10 @@ $challenges = $challenges ?? []; // challenges passed from the controller
               </ul>
             </div>
           </div>
-        </div>
       </div>
     </div>
-
+  </div>
+</form>
     <!-- Challenge Count -->
     <div class="row mb-4">
       <div class="col-12">
@@ -386,46 +393,35 @@ $challenges = $challenges ?? []; // challenges passed from the controller
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Filter type buttons
-    const typeFilters = document.querySelectorAll('.filter-type');
-    typeFilters.forEach(filter => {
+    // Auto-submit form when a filter is changed
+    document.querySelectorAll('.filter-type').forEach(filter => {
       filter.addEventListener('change', function() {
-        // Uncheck other type filters (only one type at a time)
-        typeFilters.forEach(f => {
-          if (f !== filter) {
-            f.checked = false;
-          }
-        });
+        document.getElementById('filterForm').submit();
       });
     });
     
-    // Apply filters button
-    document.getElementById('applyFilters').addEventListener('click', function() {
-      // Get selected type
-      let selectedType = null;
-      typeFilters.forEach(filter => {
-        if (filter.checked) {
-          selectedType = filter.value;
+    // Auto-submit form when duration filters are changed too
+    document.querySelectorAll('.filter-duration').forEach(filter => {
+      filter.addEventListener('change', function() {
+        // Get all selected durations
+        const selectedDurations = [];
+        document.querySelectorAll('.filter-duration:checked').forEach(f => {
+          selectedDurations.push(f.value);
+        });
+        
+        // Create hidden input for duration
+        let durationInput = document.querySelector('input[name="duration"]');
+        if (!durationInput) {
+          durationInput = document.createElement('input');
+          durationInput.type = 'hidden';
+          durationInput.name = 'duration';
+          document.getElementById('filterForm').appendChild(durationInput);
         }
+        
+        // Set value and submit
+        durationInput.value = selectedDurations.join(',');
+        document.getElementById('filterForm').submit();
       });
-      
-      // Get selected durations
-      const selectedDurations = [];
-      document.querySelectorAll('.filter-duration:checked').forEach(filter => {
-        selectedDurations.push(filter.value);
-      });
-      
-      // Build URL with filters
-      let url = 'index.php?command=challenge_search';
-      if (selectedType) {
-        url += '&category=' + selectedType;
-      }
-      if (selectedDurations.length > 0) {
-        url += '&duration=' + selectedDurations.join(',');
-      }
-      
-      // Navigate to filtered URL
-      window.location.href = url;
     });
     
     // Submit challenge button
