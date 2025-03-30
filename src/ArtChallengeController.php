@@ -64,7 +64,7 @@ class ArtChallengeController {
             case "challenge_search":
                 $this->showChallengeSearch();
                 break;
-            case "challenge_detail":
+            case "challenge_details":
                 $this->showChallengeDetail();
                 break;
             case "complete_challenge":
@@ -100,13 +100,13 @@ class ArtChallengeController {
                 exit();
             }
             
-            // Check if user exists and password is correct
+            // FIXED: Check if user exists and password is correct
             $users = $this->db->query(
-                "SELECT * FROM users WHERE email = $1", 
+                "SELECT * FROM art_thing_users WHERE email = $1", 
                 $email
             );
             
-            if ($users && count($users) > 0) {
+            if ($users && !empty($users)) {
                 $user = $users[0];
                 if (password_verify($password, $user["password_hash"])) {
                     // Store user info in session
@@ -126,7 +126,6 @@ class ArtChallengeController {
             exit();
         }
     }
-    
     // Add other methods for signup, logout, dashboard, etc.
     // ...
 
@@ -265,9 +264,9 @@ public function savePrompt() {
         $prompt = $data["prompt"];
         $userId = $_SESSION["user_id"];
         
-        // Insert into database
+        // Insert into database with correct table name
         $result = $this->db->query(
-            "INSERT INTO saved_prompts (user_id, prompt_text) VALUES ($1, $2)",
+            "INSERT INTO art_thing_saved_prompts (user_id, prompt_text) VALUES ($1, $2)",
             $userId, $prompt
         );
         
@@ -289,7 +288,6 @@ public function savePrompt() {
     ]);
     exit();
 }
-
 /**
  * Dashboard
  */
@@ -297,6 +295,7 @@ public function savePrompt() {
  /**
  * Show the dashboard page
  */
+
 public function showDashboard() {
     // Check if user is logged in
     if (!isset($_SESSION["logged_in"]) || !$_SESSION["logged_in"]) {
@@ -305,9 +304,31 @@ public function showDashboard() {
         exit();
     }
     
+    // Get user data
+    $userId = $_SESSION["user_id"];
+    
+    // Get saved prompts with the correct table name
+    $savedPrompts = $this->db->query(
+        "SELECT * FROM art_thing_saved_prompts WHERE user_id = $1 ORDER BY created_at DESC",
+        $userId
+    );
+    
+    // Get challenge history with the correct table name
+    $challengeHistory = $this->db->query(
+        "SELECT c.title, c.description, uc.completed_at 
+         FROM art_thing_user_challenges uc 
+         JOIN art_thing_challenges c ON uc.challenge_id = c.challenge_id 
+         WHERE uc.user_id = $1 
+         ORDER BY uc.completed_at DESC",
+        $userId
+    );
+    
+    // Handle potentially null/false values
+    $completedChallenges = $challengeHistory ? count($challengeHistory) : 0;
+    $totalSavedPrompts = $savedPrompts ? count($savedPrompts) : 0;
+    
     include("templates/dashboard.php");
 }
-
 /**
  * Delete a saved prompt
  */
@@ -405,7 +426,7 @@ public function handleSignup() {
         
         // Check if user already exists
         $existingUsers = $this->db->query(
-            "SELECT COUNT(*) as count FROM users WHERE email = $1 OR username = $2",
+            "SELECT COUNT(*) as count FROM art_thing_users WHERE email = $1 OR username = $2",
             $email, $username
         );
         
@@ -420,7 +441,7 @@ public function handleSignup() {
         
         // Insert user into database
         $result = $this->db->query(
-            "INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING user_id",
+            "INSERT INTO art_thing_users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING user_id",
             $username, $email, $password_hash
         );
         
@@ -502,9 +523,9 @@ public function showChallengeSearch() {
             $conditions[] = "duration IN (" . implode(",", $durationPlaceholders) . ")";
         }
     }
-    
-    // Build the complete query
-    $query = "SELECT * FROM challenges";
+
+    $query = "SELECT * FROM art_thing_challenges";
+
     
     if (!empty($conditions)) {
         $query .= " WHERE " . implode(" AND ", $conditions);
@@ -515,8 +536,7 @@ public function showChallengeSearch() {
     // Execute query
     $challenges = $this->db->query($query, ...$params);
     
-    // Include template with challenges data
-    include("templates/challenge-search.php");
+    include("templates/challenges-search.php");
 }
 
 /**
@@ -623,7 +643,7 @@ public function showChallengeDetail() {
         }
     }
     
-    include("templates/challenge-detail.php");
+    include("templates/challenge-details.php");
 }
 
 /**
@@ -669,7 +689,7 @@ public function completeChallenge() {
         }
         
         // Redirect back to challenge detail
-        header("Location: index.php?command=challenge_detail&id=" . $challengeId);
+        header("Location: index.php?command=challenge_details&id=" . $challengeId);
         exit();
     }
 }

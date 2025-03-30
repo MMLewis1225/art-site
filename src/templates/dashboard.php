@@ -45,7 +45,7 @@ $totalSavedPrompts = count($savedPrompts);
 </head>
 <body>
   <header>
-    <?php include("nav.php"); ?>
+    <?php include("templates/nav.php"); ?>
   </header>
 
   <div class="container py-4">
