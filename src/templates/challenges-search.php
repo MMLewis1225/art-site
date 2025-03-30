@@ -1,7 +1,7 @@
 <?php
 // Get the challenges
 $category = isset($_GET["category"]) ? $_GET["category"] : null;
-$challenges = $challenges ?? []; // Use the challenges passed from the controller
+$challenges = $challenges ?? []; // challenges passed from the controller
 ?>
 
 <!DOCTYPE html>
@@ -224,7 +224,7 @@ $challenges = $challenges ?? []; // Use the challenges passed from the controlle
                   <?php echo htmlspecialchars($challenge['description']); ?>
                 </p>
                 <div class="d-flex justify-content-between align-items-center mt-3">
-                  <a href="index.php?command=challenge_detail&id=<?php echo $challenge['challenge_id']; ?>" class="btn btn-sm btn-primary">Start Challenge</a>
+                  <a href="index.php?command=challenge_details&id=<?php echo $challenge['challenge_id']; ?>" class="btn btn-sm btn-primary">Start Challenge</a>
                 </div>
               </div>
             </div>

@@ -12,25 +12,24 @@ $username = $_SESSION["username"];
 
 // Get saved prompts
 $savedPrompts = $this->db->query(
-    "SELECT * FROM saved_prompts WHERE user_id = $1 ORDER BY created_at DESC",
+    "SELECT * FROM art_thing_saved_prompts WHERE user_id = $1 ORDER BY created_at DESC",
     $userId
 );
-
 // Get challenge history
 $challengeHistory = $this->db->query(
     "SELECT c.title, c.description, uc.completed_at 
-     FROM user_challenges uc 
-     JOIN challenges c ON uc.challenge_id = c.challenge_id 
+     FROM art_thing_user_challenges uc 
+     JOIN art_thing_challenges c ON uc.challenge_id = c.challenge_id 
      WHERE uc.user_id = $1 
      ORDER BY uc.completed_at DESC",
     $userId
 );
 
-// Count total challenges completed
-$completedChallenges = count($challengeHistory);
+//later-- get user art journals 
 
-// Count total saved prompts
-$totalSavedPrompts = count($savedPrompts);
+$completedChallenges = $challengeHistory ? count($challengeHistory) : 0;
+$totalSavedPrompts = $savedPrompts ? count($savedPrompts) : 0;
+
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +44,7 @@ $totalSavedPrompts = count($savedPrompts);
 </head>
 <body>
   <header>
-    <?php include("templates/nav.php"); ?>
+    <?php include("nav.php"); ?>
   </header>
 
   <div class="container py-4">
@@ -102,7 +101,7 @@ $totalSavedPrompts = count($savedPrompts);
             <h6 class="card-title text-muted">Member Since</h6>
             <h2 class="card-text">
               <?php 
-                // Get current date for now, but you could store and use registration date
+                //  Get current date for now, can change to store user registration date later
                 echo date("M Y"); 
               ?>
             </h2>
@@ -148,9 +147,12 @@ $totalSavedPrompts = count($savedPrompts);
                       <a href="index.php?command=generator" class="btn btn-sm btn-outline-primary">
                         Create Art
                       </a>
-                      <button class="btn btn-sm btn-outline-danger" onclick="deletePrompt(<?php echo $prompt['prompt_id']; ?>)">
-                        Remove
-                      </button>
+                      <form method="POST" action="index.php?command=delete_prompt" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this prompt?');">
+                          <input type="hidden" name="prompt_id" value="<?php echo $prompt['prompt_id']; ?>">
+                          <button type="submit" class="btn btn-sm btn-outline-danger">
+                              Remove
+                          </button>
+                      </form>
                     </div>
                   </div>
                   <div class="card-footer text-muted">
@@ -205,33 +207,7 @@ $totalSavedPrompts = count($savedPrompts);
     <p>© 2025. All rights reserved.</p>
   </footer>
 
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Function to delete a saved prompt
-    function deletePrompt(promptId) {
-      if (confirm('Are you sure you want to delete this prompt?')) {
-        // Make AJAX request to delete the prompt
-        fetch('index.php?command=delete_prompt', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            prompt_id: promptId
-          })
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            // Reload the page to show updated list
-            window.location.reload();
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-      }
-    }
-  </script>
 </body>
 </html>

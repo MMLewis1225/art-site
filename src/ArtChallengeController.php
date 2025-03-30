@@ -295,7 +295,6 @@ public function savePrompt() {
  /**
  * Show the dashboard page
  */
-
 public function showDashboard() {
     // Check if user is logged in
     if (!isset($_SESSION["logged_in"]) || !$_SESSION["logged_in"]) {
@@ -335,46 +334,40 @@ public function showDashboard() {
 public function deletePrompt() {
     // Check if user is logged in
     if (!isset($_SESSION["logged_in"]) || !$_SESSION["logged_in"]) {
-        header('Content-Type: application/json');
-        echo json_encode([
-            "success" => false,
-            "message" => "You must be logged in to delete prompts"
-        ]);
+        $_SESSION["error"] = "You must be logged in to delete prompts";
+        header("Location: index.php?command=login");
         exit();
     }
     
-    // Get JSON data from request
-    $json = file_get_contents('php://input');
-    $data = json_decode($json, true);
-    
-    if (isset($data["prompt_id"])) {
-        $promptId = $data["prompt_id"];
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $promptId = $_POST["prompt_id"] ?? null;
+        
+        if (!$promptId) {
+            $_SESSION["error"] = "Invalid prompt";
+            header("Location: index.php?command=dashboard");
+            exit();
+        }
+        
         $userId = $_SESSION["user_id"];
         
         // Make sure the prompt belongs to this user
         $result = $this->db->query(
-            "DELETE FROM saved_prompts WHERE prompt_id = $1 AND user_id = $2",
+            "DELETE FROM art_thing_saved_prompts WHERE prompt_id = $1 AND user_id = $2",
             $promptId, $userId
         );
         
         if ($result) {
-            header('Content-Type: application/json');
-            echo json_encode([
-                "success" => true,
-                "message" => "Prompt deleted successfully"
-            ]);
-            exit();
+            $_SESSION["success"] = "Prompt deleted successfully";
+        } else {
+            $_SESSION["error"] = "Error deleting prompt";
         }
+        
+        // Redirect back to dashboard
+        header("Location: index.php?command=dashboard");
+        exit();
     }
-    
-    // If we get here, something went wrong
-    header('Content-Type: application/json');
-    echo json_encode([
-        "success" => false,
-        "message" => "Error deleting prompt"
-    ]);
-    exit();
 }
+
 
 
 /**

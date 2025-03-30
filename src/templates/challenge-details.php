@@ -120,12 +120,6 @@ $hasCompleted = $hasCompleted ?? false;
             <div class="card-body">
               <h5 class="card-title">Share This Challenge</h5>
               <div class="d-grid gap-2 mt-3">
-                <button class="btn btn-outline-primary btn-sm">
-                  <i class="bi bi-facebook"></i> Share on Facebook
-                </button>
-                <button class="btn btn-outline-info btn-sm">
-                  <i class="bi bi-twitter"></i> Share on Twitter
-                </button>
                 <button class="btn btn-outline-secondary btn-sm" id="copyLinkBtn">
                   <i class="bi bi-link-45deg"></i> Copy Link
                 </button>
