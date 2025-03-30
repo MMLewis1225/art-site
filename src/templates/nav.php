@@ -16,24 +16,40 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
         <li class="nav-item">
-          <a class="nav-link <?php echo ($_GET['command'] == 'home' || !isset($_GET['command'])) ? 'active' : ''; ?>" href="index.php?command=home">Home</a>
+          <a class="nav-link <?php echo (!isset($_GET["command"]) || $_GET["command"] == 'home') ? 'active' : ''; ?>" href="index.php">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link <?php echo ($_GET['command'] == 'generator') ? 'active' : ''; ?>" href="index.php?command=generator">Generate</a>
+          <a class="nav-link <?php echo (isset($_GET["command"]) && $_GET["command"] == 'generator') ? 'active' : ''; ?>" href="index.php?command=generator">Generate</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link <?php echo ($_GET['command'] == 'challenges') ? 'active' : ''; ?>" href="index.php?command=challenges">Challenge</a>
+          <a class="nav-link <?php echo (isset($_GET["command"]) && ($_GET["command"] == 'challenges' || $_GET["command"] == 'challenge_search')) ? 'active' : ''; ?>" href="index.php?command=challenges">Challenges</a>
         </li>
+        <?php if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"]): ?>
+        <li class="nav-item">
+          <a class="nav-link <?php echo (isset($_GET["command"]) && $_GET["command"] == 'dashboard') ? 'active' : ''; ?>" href="index.php?command=dashboard">My Dashboard</a>
+        </li>
+        <?php endif; ?>
       </ul>
 
-      <!-- Login & Signup/Logout Buttons -->
       <div class="d-flex flex-row flex-md-row gap-2">
         <?php if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"]): ?>
-          <span class="navbar-text me-2">Welcome, <?php echo $_SESSION["username"]; ?></span>
-          <a href="index.php?command=logout" class="btn btn-sm btn-outline-primary">Sign out</a>
+          <!-- Logged in: show user info and logout -->
+          <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+              <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 32px; height: 32px">
+                <span><?php echo strtoupper(substr($_SESSION["username"], 0, 2)); ?></span>
+              </div>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end text-small" aria-labelledby="dropdownUser1">
+              <li><a class="dropdown-item" href="index.php?command=dashboard">Dashboard</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="index.php?command=logout">Sign out</a></li>
+            </ul>
+          </div>
         <?php else: ?>
+          <!-- Not logged in: show login/signup buttons -->
           <a href="index.php?command=login" class="btn btn-sm btn-outline-primary">Log in</a>
-          <a href="index.php?command=signup" class="btn btn-sm btn-primary">Sign-up</a>
+          <a href="index.php?command=signup" class="btn btn-sm btn-primary">Sign up</a>
         <?php endif; ?>
       </div>
     </div>
