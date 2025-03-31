@@ -89,28 +89,7 @@ $isLoggedIn = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
                     <div class="form-text">The generator will suggest techniques compatible with your selected medium.</div>
                   </div>
                   
-                  <div class="small-text">
-                    <h6>Techniques by category:</h6>
-                    <?php foreach (ArtData::$techniques as $category => $techniques): ?>
-                    <div class="mb-3">
-                      <div class="card bg-light">
-                        <div class="card-header py-2">
-                          <h6 class="mb-0"><?php echo $category; ?></h6>
-                        </div>
-                        <div class="card-body py-2">
-                          <ul class="mb-0 ps-3">
-                            <?php foreach ($techniques as $technique): ?>
-                            <li title="Compatible with: <?php echo implode(', ', $technique['compatibleMediums']); ?>">
-                              <strong><?php echo $technique['name']; ?></strong> - 
-                              <em><?php echo $technique['description']; ?></em>
-                            </li>
-                            <?php endforeach; ?>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                    <?php endforeach; ?>
-                  </div>
+   
                 </div>
               </div>
             </div>
@@ -196,8 +175,8 @@ $isLoggedIn = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
                         <label class="form-check-label" for="subject_<?php echo str_replace(' ', '_', $category); ?>"><?php echo $category; ?></label>
                       </div>
                       <?php endforeach; ?>
-                      
-                      <!-- Subject Examples for each category -->
+   
+<!-- Subject Examples for each category -->
                       <?php foreach (ArtData::$subjects as $category => $examples): ?>
                       <div id="subject_examples_<?php echo str_replace(' ', '_', $category); ?>" class="subject-examples mt-3 <?php echo $category !== 'Person' ? 'd-none' : ''; ?>">
                         <div class="card bg-light">
@@ -205,16 +184,15 @@ $isLoggedIn = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
                             <h6 class="mb-0"><?php echo $category; ?> examples:</h6>
                           </div>
                           <div class="card-body small-text py-2">
-                            <ul class="mb-0 ps-3">
-                              <?php foreach ($examples as $example): ?>
-                              <li><?php echo $example; ?></li>
-                              <?php endforeach; ?>
+                           <ul class="mb-0 ps-3">
+                              <li><?php echo $examples[0]; ?></li>
                             </ul>
+
                           </div>
                         </div>
                       </div>
                       <?php endforeach; ?>
-                    </div>
+                     </div>
                     
                     <!-- Reference Source Options -->
                     <div id="referenceSourceOptions" style="display: none;">
@@ -222,13 +200,14 @@ $isLoggedIn = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
                       <div class="card bg-light">
                         <div class="card-body small-text py-2">
                           <ul class="mb-0 ps-3">
-                            <?php foreach (ArtData::$references as $reference): ?>
-                            <li><?php echo $reference; ?></li>
-                            <?php endforeach; ?>
+                            <li>Something that starts with the letter B</li>
+                            <li>An image from <a href="https://unsplash.com/t/nature" target="_blank">https://unsplash.com/t/nature</a></li>
+                            <li>The last photo in your camera roll</li>
                           </ul>
                         </div>
                       </div>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -271,28 +250,11 @@ $isLoggedIn = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
                       <label class="form-check-label" for="theme_<?php echo str_replace(' ', '_', $category); ?>"><?php echo $category; ?></label>
                     </div>
                     <?php endforeach; ?>
-                    
-                    <!-- Theme Examples for each category -->
-                    <?php foreach (ArtData::$themes as $category => $examples): ?>
-                    <div id="theme_examples_<?php echo str_replace(' ', '_', $category); ?>" class="theme-examples mt-3 <?php echo $category !== 'Abstract Ideas' ? 'd-none' : ''; ?>">
-                      <div class="card bg-light">
-                        <div class="card-header py-2">
-                          <h6 class="mb-0"><?php echo $category; ?> examples:</h6>
-                        </div>
-                        <div class="card-body small-text py-2">
-                          <ul class="mb-0 ps-3">
-                            <?php foreach ($examples as $example): ?>
-                            <li><?php echo $example; ?></li>
-                            <?php endforeach; ?>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                    <?php endforeach; ?>
+                  
                   </div>
                   
                   <!-- Mood Options -->
-                  <div id="moodOptions" style="display: none;">
+                <!--    <div id="moodOptions" style="display: none;">
                     <h6>Possible moods:</h6>
                     <div class="card bg-light">
                       <div class="card-body py-2">
@@ -303,7 +265,7 @@ $isLoggedIn = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
