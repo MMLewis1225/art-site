@@ -176,7 +176,7 @@ $isLoggedIn = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
                       </div>
                       <?php endforeach; ?>
    
-<!-- Subject Examples for each category -->
+                    <!-- Subject Examples for each category -->
                       <?php foreach (ArtData::$subjects as $category => $examples): ?>
                       <div id="subject_examples_<?php echo str_replace(' ', '_', $category); ?>" class="subject-examples mt-3 <?php echo $category !== 'Person' ? 'd-none' : ''; ?>">
                         <div class="card bg-light">
@@ -243,14 +243,13 @@ $isLoggedIn = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
                   <div id="themeOptions" style="display: none;">
                     <h6>Select theme category:</h6>
                     <?php foreach (array_keys(ArtData::$themes) as $category): ?>
-                    <div class="form-check">
-                      <input class="form-check-input theme-category-radio" type="radio" name="themeCategory" 
-                             id="theme_<?php echo str_replace(' ', '_', $category); ?>" 
-                             value="<?php echo $category; ?>" <?php echo $category === 'Abstract Ideas' ? 'checked' : ''; ?>>
-                      <label class="form-check-label" for="theme_<?php echo str_replace(' ', '_', $category); ?>"><?php echo $category; ?></label>
-                    </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="themeCategory[]" 
+                              id="theme_<?php echo str_replace(' ', '_', $category); ?>" 
+                              value="<?php echo $category; ?>">
+                        <label class="form-check-label" for="theme_<?php echo str_replace(' ', '_', $category); ?>"><?php echo $category; ?></label>
+                      </div>
                     <?php endforeach; ?>
-                  
                   </div>
                   
                   <!-- Mood Options -->
@@ -302,6 +301,7 @@ $isLoggedIn = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
                     <p class="small-text text-muted mb-2">
                       The generator will only suggest surfaces compatible with your selected medium.
                     </p>
+                      <!-- List of surfaces?? at some point? 
                     <div class="card bg-light">
                       <div class="card-body small-text py-2">
                         <ul class="mb-0 ps-3">
@@ -312,7 +312,7 @@ $isLoggedIn = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
                           <?php endforeach; ?>
                         </ul>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                   
                   <!-- Color Options -->
@@ -396,14 +396,14 @@ $isLoggedIn = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
     });
     
     // Show examples for selected theme category
-    document.querySelectorAll('.theme-category-radio').forEach(radio => {
+   /* document.querySelectorAll('.theme-category-radio').forEach(radio => {
       radio.addEventListener('change', function() {
         document.querySelectorAll('.theme-examples').forEach(div => {
           div.classList.add('d-none');
         });
         document.getElementById('theme_examples_' + this.value.replace(' ', '_')).classList.remove('d-none');
       });
-    });
+    });*/
 
     // Generate and save prompt functionality
     document.addEventListener('DOMContentLoaded', function() {

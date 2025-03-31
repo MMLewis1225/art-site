@@ -288,11 +288,24 @@ private function createEnhancedPromptText(
     
     // Handle theme if included
     if ($includeTheme && !empty($themeCategory)) {
-        if (isset(ArtData::$themes[$themeCategory]) && !empty(ArtData::$themes[$themeCategory])) {
-            $themes = ArtData::$themes[$themeCategory];
-            $themeText = " exploring the theme of " . $themes[array_rand($themes)];
+        if (!is_array($themeCategory)) {
+            $themeCategory = [$themeCategory];
+        }
+        
+        $themeSelections = [];
+        foreach ($themeCategory as $cat) {
+            if (isset(ArtData::$themes[$cat]) && !empty(ArtData::$themes[$cat])) {
+                // Pick one random theme from this category
+                $randomTheme = ArtData::$themes[$cat][array_rand(ArtData::$themes[$cat])];
+                $themeSelections[] = "$cat: $randomTheme";
+            }
+        }
+        
+        if (!empty($themeSelections)) {
+            $themeText = " exploring themes: " . implode(", ", $themeSelections);
         }
     }
+
     
     // Handle mood if included
     if ($includeMood) {
