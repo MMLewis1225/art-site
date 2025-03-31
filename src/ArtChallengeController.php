@@ -1,11 +1,11 @@
 <?php
+require_once("src/ArtData.php");
+
 class ArtChallengeController {
     private $db;
     private $input;
     
-    /**
-     * Constructor
-     */
+    //Constructor
     public function __construct($input) {
         $this->db = new Database();
         $this->input = $input;
@@ -78,16 +78,13 @@ class ArtChallengeController {
                 break;
         }
     }
-    /**
-     * Show the home page
-     */
+    // Show the home page
     public function showHome() {
         include("templates/home.php");
     }
     
-    /**
-     * Handle login form submission
-     */
+    //Handle login form submission
+    
     public function handleLogin() {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $email = $_POST["email"] ?? "";
@@ -126,14 +123,13 @@ class ArtChallengeController {
             exit();
         }
     }
-    // Add other methods for signup, logout, dashboard, etc.
-    // ...
 
-
-    /**
+/**
  * Show the generator page
  */
 public function showGenerator() {
+    // Make sure ArtData is included
+    require_once "ArtData.php";
     include("templates/generator.php");
 }
 
@@ -144,10 +140,36 @@ public function generatePrompt() {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Get form data
         $medium = isset($_POST["medium"]) ? $_POST["medium"] : [];
-        $subject = isset($_POST["subject"]) ? $_POST["subject"] : [];
+        $mixedMedia = $_POST["mixedMedia"] ?? "No";
+        
+        $includeTechnique = isset($_POST["includeTechnique"]);
+        $includeStyle = isset($_POST["includeStyle"]);
+        $includeSubject = isset($_POST["includeSubject"]);
+        $subjectType = $_POST["subjectType"] ?? "";
+        $subjectCategory = $_POST["subjectCategory"] ?? "";
+        
+        $includeTheme = isset($_POST["includeTheme"]);
+        $themeCategory = $_POST["themeCategory"] ?? "";
+        $includeMood = isset($_POST["includeMood"]);
+        
+        $includeSurface = isset($_POST["includeSurface"]);
+        $includeColors = isset($_POST["includeColors"]);
         
         // Generate prompt text
-        $prompt = $this->createPromptText($medium, $subject);
+        $prompt = $this->createEnhancedPromptText(
+            $medium, 
+            $mixedMedia, 
+            $includeTechnique, 
+            $includeStyle, 
+            $includeSubject,
+            $subjectType,
+            $subjectCategory,
+            $includeTheme,
+            $themeCategory,
+            $includeMood,
+            $includeSurface,
+            $includeColors
+        );
         
         // Return JSON response
         header('Content-Type: application/json');
@@ -160,86 +182,171 @@ public function generatePrompt() {
 }
 
 /**
- * Create a prompt text from selected options
+ * Create an enhanced prompt text from selected options
  */
-private function createPromptText($medium, $subject) {
-    // Default prompt components
+private function createEnhancedPromptText(
+    $medium, 
+    $mixedMedia, 
+    $includeTechnique, 
+    $includeStyle, 
+    $includeSubject,
+    $subjectType,
+    $subjectCategory,
+    $includeTheme,
+    $themeCategory,
+    $includeMood,
+    $includeSurface,
+    $includeColors
+) {
+
+    // Initialize prompt components
     $mediumText = "any medium of your choice";
-    $subjectText = "a subject that inspires you";
+    $techniqueText = "";
+    $styleText = "";
+    $subjectText = "";
+    $themeText = "";
+    $moodText = "";
+    $surfaceText = "";
+    $colorText = "";
     
-    // If mediums were selected
+    // Handle medium selection
     if (!empty($medium)) {
-        // Select a random medium
-        $randomMedium = $medium[array_rand($medium)];
-        $mediumText = $this->formatMedium($randomMedium);
+        if ($mixedMedia === "Yes" || ($mixedMedia === "Random" && rand(0, 1) === 1)) {
+            // Select 2-3 random mediums
+            $selectedCount = min(count($medium), rand(2, 3));
+            $selectedMediums = array_rand(array_flip($medium), $selectedCount);
+            
+            if (is_array($selectedMediums)) {
+                $mediumText = implode(" and ", $selectedMediums);
+            } else {
+                $mediumText = $selectedMediums;
+            }
+            
+            $mediumText .= " in a mixed media approach";
+        } else {
+            // Select a single random medium
+            $randomMedium = $medium[array_rand($medium)];
+            $mediumText = $randomMedium;
+        }
     }
     
-    // If subjects were selected
-    if (!empty($subject)) {
-        // Select a random subject
-        $randomSubject = $subject[array_rand($subject)];
-        $subjectText = $this->formatSubject($randomSubject);
+    // Handle technique if included
+    if ($includeTechnique) {
+        // Find compatible techniques for the selected medium(s)
+        $compatibleTechniques = [];
+        
+        foreach (ArtData::$techniques as $category => $techniques) {
+            foreach ($techniques as $technique) {
+                $compatible = false;
+                
+                // Check if any selected medium is compatible with this technique
+                foreach ($medium as $selectedMedium) {
+                    if (in_array($selectedMedium, $technique['compatibleMediums'])) {
+                        $compatible = true;
+                        break;
+                    }
+                }
+                
+                if ($compatible) {
+                    $compatibleTechniques[] = $technique['name'];
+                }
+            }
+        }
+        
+        if (!empty($compatibleTechniques)) {
+            $techniqueText = " using the " . $compatibleTechniques[array_rand($compatibleTechniques)] . " technique";
+        }
+    }
+    
+    // Handle style if included
+    if ($includeStyle) {
+        $allStyles = [];
+        foreach (ArtData::$styles as $category => $styles) {
+            foreach ($styles as $style) {
+                $allStyles[] = $style['name'];
+            }
+        }
+        
+        if (!empty($allStyles)) {
+            $styleText = " in a " . $allStyles[array_rand($allStyles)] . " style";
+        }
+    }
+    
+    // Handle subject if included
+    if ($includeSubject) {
+        if ($subjectType === "Subject/Focus" && !empty($subjectCategory)) {
+            if (isset(ArtData::$subjects[$subjectCategory]) && !empty(ArtData::$subjects[$subjectCategory])) {
+                $subjects = ArtData::$subjects[$subjectCategory];
+                $subjectText = " depicting " . $subjects[array_rand($subjects)];
+            }
+        } else {
+            // Reference source
+            $references = ArtData::$references;
+            $subjectText = " based on " . $references[array_rand($references)];
+        }
+    }
+    
+    // Handle theme if included
+    if ($includeTheme && !empty($themeCategory)) {
+        if (isset(ArtData::$themes[$themeCategory]) && !empty(ArtData::$themes[$themeCategory])) {
+            $themes = ArtData::$themes[$themeCategory];
+            $themeText = " exploring the theme of " . $themes[array_rand($themes)];
+        }
+    }
+    
+    // Handle mood if included
+    if ($includeMood) {
+        $moods = ArtData::$moods;
+        $moodText = " with a " . $moods[array_rand($moods)] . " mood";
+    }
+    
+    // Handle surface if included
+    if ($includeSurface) {
+        $compatibleSurfaces = [];
+        
+        foreach (ArtData::$surfaces as $surface) {
+            $compatible = false;
+            
+            // Check if any selected medium is compatible with this surface
+            foreach ($medium as $selectedMedium) {
+                if (in_array($selectedMedium, $surface['compatibleMediums'])) {
+                    $compatible = true;
+                    break;
+                }
+            }
+            
+            if ($compatible) {
+                $compatibleSurfaces[] = $surface['name'];
+            }
+        }
+        
+        if (!empty($compatibleSurfaces)) {
+            $surfaceText = " on " . $compatibleSurfaces[array_rand($compatibleSurfaces)];
+        }
+    }
+    
+    // Handle color if included
+    if ($includeColors) {
+        $colors = ArtData::$colors;
+        $randomColor = $colors[array_rand($colors)];
+        $colorText = " using a " . $randomColor['name'] . " color scheme";
     }
     
     // Construct final prompt
-    $prompt = "Create a piece using $mediumText that depicts $subjectText.";
+    $prompt = "Create a piece using $mediumText$surfaceText$techniqueText$styleText$subjectText$themeText$moodText$colorText.";
     
     // Add a random additional instruction
-    $additionalInstructions = [
+  /*  $additionalInstructions = [
         "Focus on creating strong contrast between light and dark.",
-        "Experiment with unusual color combinations.",
-        "Try to complete this in less than 30 minutes.",
-        "Use only three colors in your composition.",
-        "Focus on capturing mood and atmosphere rather than details."
+        "Pay special attention to composition and negative space.",
+        "Try to complete this in under 30 minutes as a warm-up exercise.",
+        "Experiment with your mark-making to create interesting textures.",
+        "Focus on capturing mood and atmosphere rather than perfecting details."
     ];
     
-    $prompt .= " " . $additionalInstructions[array_rand($additionalInstructions)];
+    $prompt .= " " . $additionalInstructions[array_rand($additionalInstructions)]; */
     
     return $prompt;
-}
-
-/**
- * Format medium name for prompt text
- */
-private function formatMedium($medium) {
-    switch ($medium) {
-        case 'watercolor':
-            return 'watercolor paint';
-        case 'acrylic':
-            return 'acrylic paint';
-        case 'pencil':
-            return 'pencil';
-        case 'ink':
-            return 'ink';
-        case 'digital':
-            return 'digital tools';
-        case 'mixed_media':
-            return 'mixed media';
-        default:
-            return $medium;
-    }
-}
-
-/**
- * Format subject name for prompt text
- */
-private function formatSubject($subject) {
-    switch ($subject) {
-        case 'landscape':
-            return 'a landscape that evokes emotion';
-        case 'portrait':
-            return 'a portrait with an interesting expression';
-        case 'still_life':
-            return 'a still life arrangement of everyday objects';
-        case 'abstract':
-            return 'an abstract composition based on shapes and colors';
-        case 'fantasy':
-            return 'a fantasy scene from your imagination';
-        case 'nature':
-            return 'natural elements like plants or animals';
-        default:
-            return $subject;
-    }
 }
 
 /**
@@ -263,11 +370,12 @@ public function savePrompt() {
     if (isset($data["prompt"])) {
         $prompt = $data["prompt"];
         $userId = $_SESSION["user_id"];
+        $promptData = isset($data["promptData"]) ? json_encode($data["promptData"]) : null;
         
         // Insert into database with correct table name
         $result = $this->db->query(
-            "INSERT INTO art_thing_saved_prompts (user_id, prompt_text) VALUES ($1, $2)",
-            $userId, $prompt
+            "INSERT INTO art_thing_saved_prompts (user_id, prompt_text, prompt_data) VALUES ($1, $2, $3)",
+            $userId, $prompt, $promptData
         );
         
         if ($result) {
@@ -280,7 +388,7 @@ public function savePrompt() {
         }
     }
     
-    // If we get here, something went wrong
+    // If something went wrong: 
     header('Content-Type: application/json');
     echo json_encode([
         "success" => false,
@@ -288,14 +396,12 @@ public function savePrompt() {
     ]);
     exit();
 }
+
 /**
  * Dashboard
  */
 
- /**
- * Show the dashboard page
- */
-
+//show dashboard page
 public function showDashboard() {
     // Check if user is logged in
     if (!isset($_SESSION["logged_in"]) || !$_SESSION["logged_in"]) {
