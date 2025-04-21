@@ -421,13 +421,10 @@ $isLoggedIn = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
         const formData = new FormData(form);
         
         // Make AJAX request to server
-        fetch('index.php?command=generate_prompt', {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-          // Display the prompt
+        var requestHandler = new XMLHttpRequest();
+        requestHandler.onload = () => {
+          var data = JSON.parse(requestHandler.responseText);
+
           promptText.textContent = data.prompt;
           promptDisplay.classList.remove('d-none');
           
@@ -435,10 +432,12 @@ $isLoggedIn = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
           if (saveConfirmation) {
             saveConfirmation.classList.add('d-none');
           }
-        })
-        .catch(error => {
+        }
+        requestHandler.onerror = (error => {
           console.error('Error:', error);
         });
+        requestHandler.open("POST", 'index.php?command=generate_prompt', true);
+        requestHandler.send(formData);
       }
       
       // Generate prompt when button is clicked
