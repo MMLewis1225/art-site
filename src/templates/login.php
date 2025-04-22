@@ -37,7 +37,7 @@
           </div>
         <?php endif; ?>
         
-        <form class="form-signin" method="POST" action="index.php?command=login_handler">
+        <form id="form-signin" class="form-signin" method="POST" action="index.php?command=login_handler">
           <h1 class="h3 mb-3 fw-normal">Please log in</h1>
           
           <div class="mb-3">
@@ -86,5 +86,25 @@
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"
   ></script>
+  <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function(){
+      const form = $("#form-signin");
+      
+      form.find("input").on("input", (e) => {
+          window.sessionStorage.setItem(e.target.id, e.target.value);
+      });
+
+      form.find("input").each(function(index, elem){
+        const val = window.sessionStorage.getItem(elem.id);
+        if (val){
+          elem.value = val;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
