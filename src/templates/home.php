@@ -54,17 +54,37 @@
           </div>
         </div>
       </div>
+      <div class="text-center my-4">
+        <button id="confettiBtn" class="btn btn-lg ">
+          🎉 Celebrate Creativity!
+        </button>
+      </div>
 
       <footer class="container pt-3 mt-4 text-body-secondary border-top">
         <p>© 2025. All rights reserved.</p>
       </footer>
     </div>
 
+    <!-- Canvas-Confetti from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
       crossorigin="anonymous"
     ></script>
+    <script>
+      document
+        .getElementById('confettiBtn')
+        .addEventListener('click', () => {
+          confetti({
+            particleCount: 150,
+            spread: 60,
+            origin: { x: 0.5, y: 0 },
+          });
+        });
+    </script>
+
   </div>
 </body>
 </html>

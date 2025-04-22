@@ -112,7 +112,7 @@ $totalSavedPrompts = $savedPrompts ? count($savedPrompts) : 0;
    <!-- Reset Open things -->
     <div class="mb-3 text-end">
       <button id="clearViewBtn" class="btn btn-sm btn-outline-warning">
-        🧼 Clear View
+        Clear View
       </button>
     </div>
     <!-- Tabs for different sections -->
