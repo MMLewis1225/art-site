@@ -168,10 +168,6 @@
           const inputPassword = $("#inputPassword").val();
           const confirmPassword = $("#inputConfirmPassword").val();
 
-          console.log(inputPassword);
-          console.log(confirmPassword);
-
-
           if (inputPassword !== confirmPassword){
             event.preventDefault();
             $("#passwordError").text("Passwords do not match").show();
