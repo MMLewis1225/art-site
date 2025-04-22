@@ -109,7 +109,12 @@ $totalSavedPrompts = $savedPrompts ? count($savedPrompts) : 0;
         </div>
       </div>
     </div>
-
+   <!-- Reset Open things -->
+    <div class="mb-3 text-end">
+      <button id="clearViewBtn" class="btn btn-sm btn-outline-warning">
+        🧼 Clear View
+      </button>
+    </div>
     <!-- Tabs for different sections -->
     <ul class="nav nav-tabs mb-4" id="profileTabs" role="tablist">
       <li class="nav-item" role="presentation">
@@ -209,5 +214,22 @@ $totalSavedPrompts = $savedPrompts ? count($savedPrompts) : 0;
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  // self‑invoking anonymous function
+  (() => {
+    const btn = document.getElementById('clearViewBtn');
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-pane').forEach(pane =>
+        pane.classList.remove('show', 'active')
+      );
+      document.querySelectorAll('.nav-link').forEach(link =>
+        link.classList.remove('active')
+      );
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  })();
+</script>
+
 </body>
 </html>
