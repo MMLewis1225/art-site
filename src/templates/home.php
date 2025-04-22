@@ -55,8 +55,8 @@
         </div>
       </div>
       <div class="text-center my-4">
-        <button id="confettiBtn" class="btn btn-lg ">
-          🎉 Celebrate Creativity!
+        <button id="confettiBtn" class="btn btn-lg btn-success">
+            🎉 Celebrate Creativity!
         </button>
       </div>
 

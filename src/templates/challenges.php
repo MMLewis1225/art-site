@@ -29,7 +29,17 @@
             Explore structured challenges to boost your creativity and
             artistic skills.
           </p>
-          <a href="index.php?command=challenge_search" class="btn btn-primary px-4 py-2 challenge">View All Challenges</a>
+
+          <a href="index.php?command=challenge_search" class="btn btn-primary px-4 py-2 challenge mb-3">View All Challenges</a>
+
+          <!-- Surprise Me Button -->
+          <div>
+            <button id="scrollBtn" class="btn btn-outline-dark">
+                Scroll to Guide
+            </button>
+          </div>
+
+       
         </div>
       </div>
     </section>
@@ -112,7 +122,8 @@
       </div>
 
       <!-- Getting Started Guide -->
-      <div class="row mb-5">
+      <div class="row mb-5" id="getting-started">
+
         <div class="col-12">
           <h3 class="fw-bold mb-4">Getting Started with Challenges</h3>
           <div class="row g-4">
@@ -170,5 +181,14 @@
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
     crossorigin="anonymous"
   ></script>
+  <script>
+  document.getElementById('scrollBtn').addEventListener('click', () => {
+    const target = document.getElementById('getting-started');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+</script>
+
 </body>
 </html>
