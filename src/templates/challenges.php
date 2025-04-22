@@ -32,7 +32,7 @@
 
           <a href="index.php?command=challenge_search" class="btn btn-primary px-4 py-2 challenge mb-3">View All Challenges</a>
 
-          <!-- Surprise Me Button -->
+          <!-- Scroll Button -->
           <div>
             <button id="scrollBtn" class="btn btn-outline-dark">
                 Scroll to Guide
