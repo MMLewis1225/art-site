@@ -135,91 +135,93 @@
         return char.match(/[0-9]/);
       }
 
-      $("#usernameError").hide();
-      $("#passwordError").hide();
-
-      $(".form-signin").on("submit", function(event){
-        const username = $("#inputUsername").val()
-
-        if (username.length < 3){
-          event.preventDefault(); //don't submit
-          $("#usernameError").text("Username too short. Must be at least 3 characters").show();
-          return;
-        }
-
-        if (username.length > 20){
-          event.preventDefault();
-          $("#usernameError").text("Username too long. Must be under 20 characters").show();
-          return;
-        }
-
-        for (const char of username){
-          if (!isLetter(char) && !isNumeric(char)){
-            event.preventDefault();
-            $("#usernameError").text("Username may only contain letters and numbers").show();
-            return;
-          }
-        }
-
-        //if no error in the username, hide any previous error
+      $(document).ready(function(){
         $("#usernameError").hide();
-
-        const inputPassword = $("#inputPassword").val();
-        const confirmPassword = $("#inputConfirmPassword").val();
-
-        console.log(inputPassword);
-        console.log(confirmPassword);
-
-
-        if (inputPassword !== confirmPassword){
-          event.preventDefault();
-          $("#passwordError").text("Passwords do not match").show();
-          return;
-        }
-
-        if (inputPassword.length < 8){
-          event.preventDefault();
-          $("#passwordError").text("Passwords too short. Must be at least 8 characters").show();
-          return;
-        }
-
-        let containsUppercase = false;
-        let containsLowercase = false;
-        let containsNumber = false;
-        for (const char of inputPassword){
-          if (isNumeric(char)){
-            containsNumber = true;
-          } else if (isLetter(char)){
-            if (isUpperCase(char)){
-              containsUppercase = true;
-            } else {
-              containsLowercase = true;
-            }
-          }
-        }
-
-        if (!containsNumber){
-          event.preventDefault();
-          $("#passwordError").text("Passwords must contain a number").show();
-          return;
-        }
-
-        if (!containsUppercase){
-          event.preventDefault();
-          $("#passwordError").text("Passwords must contain an uppercase letter").show();
-          return;
-        }
-
-        if (!containsLowercase){
-          event.preventDefault();
-          $("#passwordError").text("Passwords must contain a lowercase letter").show();
-          return;
-        }
-
-        //if no error in the username, hide any previous error
         $("#passwordError").hide();
 
-      })
+        $(".form-signin").on("submit", function(event){
+          const username = $("#inputUsername").val()
+
+          if (username.length < 3){
+            event.preventDefault(); //don't submit
+            $("#usernameError").text("Username too short. Must be at least 3 characters").show();
+            return;
+          }
+
+          if (username.length > 20){
+            event.preventDefault();
+            $("#usernameError").text("Username too long. Must be under 20 characters").show();
+            return;
+          }
+
+          for (const char of username){
+            if (!isLetter(char) && !isNumeric(char)){
+              event.preventDefault();
+              $("#usernameError").text("Username may only contain letters and numbers").show();
+              return;
+            }
+          }
+
+          //if no error in the username, hide any previous error
+          $("#usernameError").hide();
+
+          const inputPassword = $("#inputPassword").val();
+          const confirmPassword = $("#inputConfirmPassword").val();
+
+          console.log(inputPassword);
+          console.log(confirmPassword);
+
+
+          if (inputPassword !== confirmPassword){
+            event.preventDefault();
+            $("#passwordError").text("Passwords do not match").show();
+            return;
+          }
+
+          if (inputPassword.length < 8){
+            event.preventDefault();
+            $("#passwordError").text("Passwords too short. Must be at least 8 characters").show();
+            return;
+          }
+
+          let containsUppercase = false;
+          let containsLowercase = false;
+          let containsNumber = false;
+          for (const char of inputPassword){
+            if (isNumeric(char)){
+              containsNumber = true;
+            } else if (isLetter(char)){
+              if (isUpperCase(char)){
+                containsUppercase = true;
+              } else {
+                containsLowercase = true;
+              }
+            }
+          }
+
+          if (!containsNumber){
+            event.preventDefault();
+            $("#passwordError").text("Passwords must contain a number").show();
+            return;
+          }
+
+          if (!containsUppercase){
+            event.preventDefault();
+            $("#passwordError").text("Passwords must contain an uppercase letter").show();
+            return;
+          }
+
+          if (!containsLowercase){
+            event.preventDefault();
+            $("#passwordError").text("Passwords must contain a lowercase letter").show();
+            return;
+          }
+
+          //if no error in the username, hide any previous error
+          $("#passwordError").hide();
+
+        }) 
+      });
     </script>
 </body>
 </html>
