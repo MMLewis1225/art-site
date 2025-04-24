@@ -73,6 +73,27 @@ class ArtChallengeController {
             case "suggest_challenge":
                 $this->suggestChallenge();
                 break;
+            case "create_art":
+                $this->showCreateArt();
+                 break;
+            case "save_project":
+                $this->saveProject();
+                break;
+            case "my_projects":
+                $this->showMyProjects();
+                break;
+            case "view_project":
+                $this->viewProject();
+                break;
+            case "edit_project":
+                $this->showEditProject();
+                break;
+            case "update_project":
+                $this->updateProject();
+                break;
+            case "delete_project":
+                $this->deleteProject();
+                break;
             default:
                 $this->showHome();
                 break;
@@ -820,6 +841,313 @@ public function completeChallenge() {
         exit();
     }
 }
+
+
+/**
+ * Show the create art form
+ */
+public function showCreateArt() {
+    // Check if user is logged in
+    if (!isset($_SESSION["logged_in"]) || !$_SESSION["logged_in"]) {
+        header("Location: index.php?command=login");
+        exit();
+    }
+    
+    $userId = $_SESSION["user_id"];
+    
+    // Get saved prompts
+    $savedPrompts = $this->db->query(
+        "SELECT * FROM art_thing_saved_prompts WHERE user_id = $1 ORDER BY created_at DESC",
+        $userId
+    );
+    
+    // Get challenges
+    $challenges = $this->db->query(
+        "SELECT * FROM art_thing_challenges ORDER BY title ASC"
+    );
+    
+    include("templates/create-art.php");
+}
+
+/**
+ * Show my projects page
+ */
+public function showMyProjects() {
+    // Check if user is logged in
+    if (!isset($_SESSION["logged_in"]) || !$_SESSION["logged_in"]) {
+        header("Location: index.php?command=login");
+        exit();
+    }
+    
+    $userId = $_SESSION["user_id"];
+    
+    // Get all projects with challenge and prompt details
+    $projects = $this->db->query(
+        "SELECT p.*, c.title as challenge_title, c.description as challenge_description, 
+                sp.prompt_text
+         FROM art_thing_user_projects p
+         LEFT JOIN art_thing_challenges c ON p.challenge_id = c.challenge_id
+         LEFT JOIN art_thing_saved_prompts sp ON p.prompt_id = sp.prompt_id
+         WHERE p.user_id = $1
+         ORDER BY p.created_at DESC",
+        $userId
+    );
+    
+    include("templates/my-projects.php");
+}
+
+/**
+ * Show the edit art form
+ */
+public function showEditProject() {
+    // Check if user is logged in
+    if (!isset($_SESSION["logged_in"]) || !$_SESSION["logged_in"]) {
+        header("Location: index.php?command=login");
+        exit();
+    }
+    
+    // Get project ID
+    $projectId = isset($this->input["project_id"]) ? $this->input["project_id"] : null;
+    if (!$projectId) {
+        header("Location: index.php?command=my_projects");
+        exit();
+    }
+    
+    $userId = $_SESSION["user_id"];
+    
+    // Get project data
+    $projects = $this->db->query(
+        "SELECT * FROM art_thing_user_projects WHERE project_id = $1 AND user_id = $2",
+        $projectId, $userId
+    );
+    
+    if (empty($projects)) {
+        header("Location: index.php?command=my_projects");
+        exit();
+    }
+    
+    $project = $projects[0];
+    
+    // Get saved prompts
+    $savedPrompts = $this->db->query(
+        "SELECT * FROM art_thing_saved_prompts WHERE user_id = $1 ORDER BY created_at DESC",
+        $userId
+    );
+    
+    // Get challenges
+    $challenges = $this->db->query(
+        "SELECT * FROM art_thing_challenges ORDER BY title ASC"
+    );
+    
+    include("templates/create-art.php");
+}
+
+/**
+ * Show project details
+ */
+public function viewProject() {
+    // Check if user is logged in
+    if (!isset($_SESSION["logged_in"]) || !$_SESSION["logged_in"]) {
+        header("Location: index.php?command=login");
+        exit();
+    }
+    
+    // Get project ID
+    $projectId = isset($this->input["project_id"]) ? $this->input["project_id"] : null;
+    if (!$projectId) {
+        header("Location: index.php?command=my_projects");
+        exit();
+    }
+    
+    $userId = $_SESSION["user_id"];
+    
+    // Get project data with challenge and prompt details
+    $projects = $this->db->query(
+        "SELECT p.*, c.title as challenge_title, c.description as challenge_description, 
+                sp.prompt_text
+         FROM art_thing_user_projects p
+         LEFT JOIN art_thing_challenges c ON p.challenge_id = c.challenge_id
+         LEFT JOIN art_thing_saved_prompts sp ON p.prompt_id = sp.prompt_id
+         WHERE p.project_id = $1 AND p.user_id = $2",
+        $projectId, $userId
+    );
+    
+    if (empty($projects)) {
+        header("Location: index.php?command=my_projects");
+        exit();
+    }
+    
+    $project = $projects[0];
+    
+    include("templates/project-detail.php");
+}
+
+/**
+ * Save a new art project
+ */
+public function saveProject() {
+    // Check if user is logged in
+    if (!isset($_SESSION["logged_in"]) || !$_SESSION["logged_in"]) {
+        header("Location: index.php?command=login");
+        exit();
+    }
+    
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $userId = $_SESSION["user_id"];
+        $title = $_POST["projectTitle"] ?? "";
+        $notes = $_POST["projectNotes"] ?? "";
+        $imageUrl = $_POST["imageUrl"] ?? "";
+        $promptId = !empty($_POST["promptId"]) ? $_POST["promptId"] : null;
+        $challengeId = !empty($_POST["challengeId"]) ? $_POST["challengeId"] : null;
+        
+        // Validate input
+        if (empty($title)) {
+            $_SESSION["error"] = "Project title is required";
+            header("Location: index.php?command=create_art");
+            exit();
+        }
+        
+        // Insert project into database
+        $result = $this->db->query(
+            "INSERT INTO art_thing_user_projects (user_id, title, notes, image_url, prompt_id, challenge_id) 
+             VALUES ($1, $2, $3, $4, $5, $6) RETURNING project_id",
+            $userId, $title, $notes, $imageUrl, $promptId, $challengeId
+        );
+        
+        if ($result && isset($result[0]["project_id"])) {
+            $_SESSION["success"] = "Project saved successfully!";
+            
+            // Mark challenge as completed if connected and not already completed
+            if ($challengeId) {
+                $completions = $this->db->query(
+                    "SELECT * FROM art_thing_user_challenges WHERE user_id = $1 AND challenge_id = $2",
+                    $userId, $challengeId
+                );
+                
+                if (empty($completions)) {
+                    $this->db->query(
+                        "INSERT INTO art_thing_user_challenges (user_id, challenge_id) VALUES ($1, $2)",
+                        $userId, $challengeId
+                    );
+                }
+            }
+            
+            // Redirect to projects page
+            header("Location: index.php?command=my_projects");
+            exit();
+        } else {
+            $_SESSION["error"] = "Error saving project";
+            header("Location: index.php?command=create_art");
+            exit();
+        }
+    }
+}
+
+/**
+ * Update an existing art project
+ */
+public function updateProject() {
+    // Check if user is logged in
+    if (!isset($_SESSION["logged_in"]) || !$_SESSION["logged_in"]) {
+        header("Location: index.php?command=login");
+        exit();
+    }
+    
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $projectId = isset($this->input["project_id"]) ? $this->input["project_id"] : null;
+        if (!$projectId) {
+            header("Location: index.php?command=my_projects");
+            exit();
+        }
+        
+        $userId = $_SESSION["user_id"];
+        $title = $_POST["projectTitle"] ?? "";
+        $notes = $_POST["projectNotes"] ?? "";
+        $imageUrl = $_POST["imageUrl"] ?? "";
+        $promptId = !empty($_POST["promptId"]) ? $_POST["promptId"] : null;
+        $challengeId = !empty($_POST["challengeId"]) ? $_POST["challengeId"] : null;
+        
+        // Validate input
+        if (empty($title)) {
+            $_SESSION["error"] = "Project title is required";
+            header("Location: index.php?command=edit_project&project_id=" . $projectId);
+            exit();
+        }
+        
+        // Update project in database
+        $result = $this->db->query(
+            "UPDATE art_thing_user_projects 
+             SET title = $1, notes = $2, image_url = $3, prompt_id = $4, challenge_id = $5, updated_at = CURRENT_TIMESTAMP
+             WHERE project_id = $6 AND user_id = $7",
+            $title, $notes, $imageUrl, $promptId, $challengeId, $projectId, $userId
+        );
+        
+        if ($result) {
+            $_SESSION["success"] = "Project updated successfully!";
+            
+            // Mark challenge as completed if connected and not already completed
+            if ($challengeId) {
+                $completions = $this->db->query(
+                    "SELECT * FROM art_thing_user_challenges WHERE user_id = $1 AND challenge_id = $2",
+                    $userId, $challengeId
+                );
+                
+                if (empty($completions)) {
+                    $this->db->query(
+                        "INSERT INTO art_thing_user_challenges (user_id, challenge_id) VALUES ($1, $2)",
+                        $userId, $challengeId
+                    );
+                }
+            }
+            
+            // Redirect to project details
+            header("Location: index.php?command=view_project&project_id=" . $projectId);
+            exit();
+        } else {
+            $_SESSION["error"] = "Error updating project";
+            header("Location: index.php?command=edit_project&project_id=" . $projectId);
+            exit();
+        }
+    }
+}
+
+/**
+ * Delete an art project
+ */
+public function deleteProject() {
+    // Check if user is logged in
+    if (!isset($_SESSION["logged_in"]) || !$_SESSION["logged_in"]) {
+        header("Location: index.php?command=login");
+        exit();
+    }
+    
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $projectId = $_POST["project_id"] ?? null;
+        if (!$projectId) {
+            header("Location: index.php?command=my_projects");
+            exit();
+        }
+        
+        $userId = $_SESSION["user_id"];
+        
+        // Delete project from database
+        $result = $this->db->query(
+            "DELETE FROM art_thing_user_projects WHERE project_id = $1 AND user_id = $2",
+            $projectId, $userId
+        );
+        
+        if ($result) {
+            $_SESSION["success"] = "Project deleted successfully!";
+        } else {
+            $_SESSION["error"] = "Error deleting project";
+        }
+        
+        // Redirect to projects page
+        header("Location: index.php?command=my_projects");
+        exit();
+    }
+}
+
 
 }
 ?>

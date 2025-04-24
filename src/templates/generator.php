@@ -357,24 +357,34 @@ $isLoggedIn = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
                 </button>
                 
                 <?php if ($isLoggedIn): ?>
-                <button class="btn btn-outline-primary" id="saveButton">
-                  <i class="bi bi-heart me-1"></i> Save Prompt
-                </button>
-                <span id="saveConfirmation" class="text-success ms-2 d-none align-self-center">
-                  <i class="bi bi-check-circle"></i> Prompt saved!
-                </span>
-                <?php else: ?>
-                <div class="ms-2 align-self-center">
-                  <span class="text-muted">
-                    <i class="bi bi-info-circle"></i> 
-                    <a href="index.php?command=login">Log in</a> to save this prompt.
+                  <button class="btn btn-outline-primary" id="saveButton">
+                    <i class="bi bi-heart me-1"></i> Save Prompt
+                  </button>
+                  
+                  <span id="saveConfirmation" class="text-success ms-2 d-none align-self-center">
+                    <i class="bi bi-check-circle"></i> Prompt saved!
                   </span>
-                </div>
+                  
+                  <a href="index.php?command=create_art<?php echo isset($promptData) ? '&prompt_id=' . $promptData['prompt_id'] : ''; ?>"
+                    class="btn btn-outline-success">
+                    <i class="bi bi-brush me-1"></i> Create Art With This
+                  </a>
+                <?php else: ?>
+                  <div class="ms-2 align-self-center">
+                    <span class="text-muted">
+                      <i class="bi bi-info-circle"></i> 
+                      <a href="index.php?command=login">Log in</a> to save this prompt.
+                    </span>
+                  </div>
                 <?php endif; ?>
+        
               </div>
             </div>
           </div>
         </div>
+
+
+
       </div>
     </div>
   </div>

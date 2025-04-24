@@ -95,6 +95,7 @@ $totalSavedPrompts = $savedPrompts ? count($savedPrompts) : 0;
         </div>
       </div>
 
+      
       <div class="col">
         <div class="card h-100 shadow-sm text-center">
           <div class="card-body">
@@ -125,6 +126,11 @@ $totalSavedPrompts = $savedPrompts ? count($savedPrompts) : 0;
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="challenges-tab" data-bs-toggle="tab" data-bs-target="#challenges-tab-pane" type="button" role="tab" aria-controls="challenges-tab-pane" aria-selected="false">
           Challenge History
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="projects-tab" data-bs-toggle="tab" data-bs-target="#projects-tab-pane" type="button" role="tab" aria-controls="projects-tab-pane" aria-selected="false">
+        Art Projects
         </button>
       </li>
     </ul>
@@ -205,6 +211,76 @@ $totalSavedPrompts = $savedPrompts ? count($savedPrompts) : 0;
           </div>
         <?php endif; ?>
       </div>
+
+
+      <!-- Art Projects Tab -->
+<div class="tab-pane fade" id="projects-tab-pane" role="tabpanel" aria-labelledby="projects-tab" tabindex="0">
+  <h3 class="mb-4">Your Art Projects</h3>
+  
+  <div class="text-end mb-4">
+    <a href="index.php?command=create_art" class="btn btn-primary">
+      <i class="bi bi-plus-circle me-1"></i> Create New Project
+    </a>
+  </div>
+  
+  <?php
+  // Get a few recent projects
+  $recentProjects = $this->db->query(
+    "SELECT p.project_id, p.title, p.image_url, p.created_at 
+     FROM art_thing_user_projects p
+     WHERE p.user_id = $1
+     ORDER BY p.created_at DESC
+     LIMIT 3",
+    $userId
+  );
+  ?>
+  
+  <?php if (empty($recentProjects)): ?>
+    <div class="alert alert-info">
+      <p>You haven't created any art projects yet. <a href="index.php?command=create_art">Create your first project</a> to document your art journey!</p>
+    </div>
+  <?php else: ?>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+      <?php foreach ($recentProjects as $project): ?>
+        <div class="col">
+          <div class="card h-100 shadow-sm">
+            <?php if (!empty($project['image_url'])): ?>
+              <img 
+                src="<?php echo htmlspecialchars($project['image_url']); ?>" 
+                class="card-img-top" 
+                alt="<?php echo htmlspecialchars($project['title']); ?>"
+                style="height: 150px; object-fit: cover;"
+                onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,%3Csvg width=\'100%\' height=\'150\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect width=\'100%\' height=\'100%\' fill=\'%23f8f9fa\'/%3E%3Ctext x=\'50%\' y=\'50%\' font-size=\'14\' text-anchor=\'middle\' alignment-baseline=\'middle\' fill=\'%23adb5bd\'%3EImage unavailable%3C/text%3E%3C/svg%3E';"
+              >
+            <?php else: ?>
+              <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 150px;">
+                <div class="text-center text-muted">
+                  <i class="bi bi-image" style="font-size: 2rem;"></i>
+                  <p class="mt-2 small">No image</p>
+                </div>
+              </div>
+            <?php endif; ?>
+            
+            <div class="card-body">
+              <h5 class="card-title"><?php echo htmlspecialchars($project['title']); ?></h5>
+              <p class="card-text small text-muted">
+                Created <?php echo date("M j, Y", strtotime($project['created_at'])); ?>
+              </p>
+              <a href="index.php?command=view_project&project_id=<?php echo $project['project_id']; ?>" class="btn btn-sm btn-outline-primary">View Project</a>
+            </div>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    </div>
+    
+    <div class="text-center">
+      <a href="index.php?command=my_projects" class="btn btn-outline-secondary">View All Projects</a>
+    </div>
+  <?php endif; ?>
+</div>
+
+
+
     </div>
   </div>
 

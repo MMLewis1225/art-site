@@ -92,6 +92,13 @@ $hasCompleted = $hasCompleted ?? false;
                         <i class="bi bi-trophy"></i> Mark as Completed
                       </button>
                     </form>
+
+                    <!-- Create Art button -->
+                    <a href="index.php?command=create_art&challenge_id=<?php echo $challenge['challenge_id']; ?>"
+                      class="btn btn-outline-success ms-2">
+                      <i class="bi bi-brush me-1"></i> Create Art For This Challenge
+                    </a>
+
                   <?php endif; ?>
                 <?php else: ?>
                   <div class="alert alert-info">
@@ -99,6 +106,7 @@ $hasCompleted = $hasCompleted ?? false;
                   </div>
                 <?php endif; ?>
               </div>
+
             </div>
           </div>
         </div>

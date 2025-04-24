@@ -3,6 +3,19 @@ DROP TABLE IF EXISTS art_thing_user_challenges CASCADE;
 DROP TABLE IF EXISTS art_thing_saved_prompts CASCADE;
 DROP TABLE IF EXISTS art_thing_challenges CASCADE;
 DROP TABLE IF EXISTS art_thing_users CASCADE;
+DROP TABLE IF EXISTS art_thing_user_projects CASCADE;
+
+CREATE TABLE art_thing_user_projects (
+    project_id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES art_thing_users(user_id) ON DELETE CASCADE,
+    title VARCHAR(100) NOT NULL,
+    notes TEXT,
+    image_url VARCHAR(255),
+    challenge_id INTEGER REFERENCES art_thing_challenges(challenge_id) ON DELETE SET NULL,
+    prompt_id INTEGER REFERENCES art_thing_saved_prompts(prompt_id) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 -- Create users table
 CREATE TABLE art_thing_users (
