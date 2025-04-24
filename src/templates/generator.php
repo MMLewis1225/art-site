@@ -385,95 +385,82 @@ $isLoggedIn = isset($_SESSION["logged_in"]) && $_SESSION["logged_in"];
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Show examples for selected subject category
-    document.querySelectorAll('.subject-category-radio').forEach(radio => {
-      radio.addEventListener('change', function() {
-        document.querySelectorAll('.subject-examples').forEach(div => {
-          div.classList.add('d-none');
-        });
-        document.getElementById('subject_examples_' + this.value.replace(' ', '_')).classList.remove('d-none');
-      });
-    });
-    
-    // Show examples for selected theme category
-   /* document.querySelectorAll('.theme-category-radio').forEach(radio => {
-      radio.addEventListener('change', function() {
-        document.querySelectorAll('.theme-examples').forEach(div => {
-          div.classList.add('d-none');
-        });
-        document.getElementById('theme_examples_' + this.value.replace(' ', '_')).classList.remove('d-none');
-      });
-    });*/
+document.addEventListener('DOMContentLoaded', () => {
+  const generateBtn   = document.getElementById('generateButton');
+  const regenerateBtn = document.getElementById('regenerateButton');
+  const saveBtn       = document.getElementById('saveButton');
+  const promptTextEl  = document.getElementById('promptText');
+  const promptWrap    = document.getElementById('promptDisplay');
 
-    // Generate and save prompt functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      const generateButton = document.getElementById('generateButton');
-      const regenerateButton = document.getElementById('regenerateButton');
-      const saveButton = document.getElementById('saveButton');
-      const promptDisplay = document.getElementById('promptDisplay');
-      const promptText = document.getElementById('promptText');
-      const saveConfirmation = document.getElementById('saveConfirmation');
-      
-      // Function to generate a prompt
-      function generatePrompt() {
-        // Get form data
-        const form = document.getElementById('promptForm');
-        const formData = new FormData(form);
-        
-        // Make AJAX request to server
-        var requestHandler = new XMLHttpRequest();
-        requestHandler.onload = () => {
-          var data = JSON.parse(requestHandler.responseText);
+  let promptSaved = false;           // ← track state for current prompt
 
-          promptText.textContent = data.prompt;
-          promptDisplay.classList.remove('d-none');
-          
-          // Hide save confirmation message if it was shown
-          if (saveConfirmation) {
-            saveConfirmation.classList.add('d-none');
-          }
-        }
-        requestHandler.onerror = (error => {
-          console.error('Error:', error);
-        });
-        requestHandler.open("POST", 'index.php?command=generate_prompt', true);
-        requestHandler.send(formData);
+  function showFeedback(msg, type = 'success') {
+    // Remove any existing alert first
+    promptWrap.querySelectorAll('.alert').forEach(a => a.remove());
+
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type} mt-3 mb-0 py-2`;
+    alert.innerHTML = `<i class="bi bi-check-circle me-1"></i>${msg}`;
+    promptWrap.appendChild(alert);
+
+    // Auto-dismiss after 3 s
+    setTimeout(() => alert.remove(), 3000);
+  }
+
+  function toggleSave(enabled) {
+    if (!saveBtn) return;
+    saveBtn.disabled = !enabled;
+    saveBtn.classList.toggle('disabled', !enabled);
+  }
+
+  function handlePromptResponse(data) {
+    promptTextEl.textContent = data.prompt;
+    promptWrap.classList.remove('d-none');
+    promptSaved = false;           // new prompt ⇒ not saved yet
+    toggleSave(true);              // enable “Save” again
+  }
+
+  function generatePrompt() {
+    const formData = new FormData(document.getElementById('promptForm'));
+
+    fetch('index.php?command=generate_prompt', {method:'POST', body:formData})
+      .then(r => r.json())
+      .then(handlePromptResponse)
+      .catch(err => console.error(err));
+  }
+
+  function savePrompt() {
+    if (promptSaved) return;       // already saved – do nothing
+
+    toggleSave(false);             // disable immediately to avoid double-clicks
+
+    fetch('index.php?command=save_prompt', {
+      method : 'POST',
+      headers: {'Content-Type':'application/json'},
+      body   : JSON.stringify({prompt: promptTextEl.textContent})
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        promptSaved = true;
+        showFeedback('Prompt saved!');
+      } else {
+        toggleSave(true);          // re-enable on failure
+        showFeedback('Save failed. Try again?','danger');
       }
-      
-      // Generate prompt when button is clicked
-      generateButton.addEventListener('click', generatePrompt);
-      
-      // Regenerate prompt when button is clicked
-      if (regenerateButton) {
-        regenerateButton.addEventListener('click', generatePrompt);
-      }
-      
-      // Save prompt if save button exists and is clicked
-      if (saveButton) {
-        saveButton.addEventListener('click', function() {
-          // Make AJAX request to save the prompt
-          fetch('index.php?command=save_prompt', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              prompt: promptText.textContent
-            })
-          })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              // Show confirmation message
-              saveConfirmation.classList.remove('d-none');
-            }
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
-        });
-      }
+    })
+    .catch(err => {
+      console.error(err);
+      toggleSave(true);
+      showFeedback('Network error.','danger');
     });
-  </script>
+  }
+
+  generateBtn.addEventListener('click', generatePrompt);
+  regenerateBtn?.addEventListener('click', generatePrompt);
+  saveBtn?.addEventListener('click', savePrompt);
+});
+</script>
+
 </body>
 </html>

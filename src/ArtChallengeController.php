@@ -366,47 +366,48 @@ private function createEnhancedPromptText(
  * Save a prompt for a logged-in user
  */
 public function savePrompt() {
-    // Check if user is logged in
-    if (!isset($_SESSION["logged_in"]) || !$_SESSION["logged_in"]) {
-        header('Content-Type: application/json');
+    header('Content-Type: application/json');
+
+    if (empty($_SESSION["logged_in"])) {
         echo json_encode([
             "success" => false,
             "message" => "You must be logged in to save prompts"
         ]);
         exit();
     }
-    
-    // Get JSON data from request
-    $json = file_get_contents('php://input');
-    $data = json_decode($json, true);
-    
-    if (isset($data["prompt"])) {
-        $prompt = $data["prompt"];
-        $userId = $_SESSION["user_id"];
-        $promptData = isset($data["promptData"]) ? json_encode($data["promptData"]) : null;
-        
-        // Insert into database with correct table name
-        $result = $this->db->query(
-            "INSERT INTO art_thing_saved_prompts (user_id, prompt_text, prompt_data) VALUES ($1, $2, $3)",
-            $userId, $prompt, $promptData
-        );
-        
-        if ($result) {
-            header('Content-Type: application/json');
-            echo json_encode([
-                "success" => true,
-                "message" => "Prompt saved successfully"
-            ]);
-            exit();
-        }
+
+    $data = json_decode(file_get_contents('php://input'), true);
+    $prompt = trim($data["prompt"] ?? '');
+    if ($prompt === '') {
+        echo json_encode([
+            "success" => false,
+            "message" => "No prompt provided"
+        ]);
+        exit();
     }
-    
-    // If something went wrong: 
-    header('Content-Type: application/json');
-    echo json_encode([
-        "success" => false,
-        "message" => "Error saving prompt"
-    ]);
+
+    $userId     = $_SESSION["user_id"];
+    $promptData = isset($data["promptData"]) ? json_encode($data["promptData"]) : null;
+
+    $result = $this->db->query(
+        "INSERT INTO art_thing_saved_prompts (user_id, prompt_text, prompt_data)
+         VALUES ($1, $2, $3)",
+        $userId,
+        $prompt,
+        $promptData
+    );
+
+    if ($result === false) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Error saving prompt"
+        ]);
+    } else {
+        echo json_encode([
+            "success" => true,
+            "message" => "Prompt saved successfully"
+        ]);
+    }
     exit();
 }
 
