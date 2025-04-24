@@ -28,6 +28,9 @@
         <li class="nav-item">
           <a class="nav-link <?php echo (isset($_GET["command"]) && $_GET["command"] == 'dashboard') ? 'active' : ''; ?>" href="index.php?command=dashboard">My Dashboard</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link <?php echo (isset($_GET["command"]) && ($_GET["command"] == 'my_projects' || $_GET["command"] == 'create_art' || $_GET["command"] == 'view_project' || $_GET["command"] == 'edit_project')) ? 'active' : ''; ?>" href="index.php?command=my_projects">My Art</a>
+        </li>
         <?php endif; ?>
       </ul>
 

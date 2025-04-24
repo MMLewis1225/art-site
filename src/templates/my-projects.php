@@ -55,7 +55,7 @@ $projects = $projects ?? [];
                 <?php foreach ($projects as $project): ?>
                     <div class="col">
                         <div class="card h-100 shadow-sm">
-                            <?php if (!empty($project['image_url'])): ?>
+                          <!--  <?php if (!empty($project['image_url'])): ?>
                                 <img 
                                     src="<?php echo htmlspecialchars($project['image_url']); ?>" 
                                     class="card-img-top" 
@@ -71,7 +71,7 @@ $projects = $projects ?? [];
                                     </div>
                                 </div>
                             <?php endif; ?>
-                            
+                            -->      
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo htmlspecialchars($project['title']); ?></h5>
                                 
